@@ -3,7 +3,11 @@ require 'open-uri'
 
 class CompaniesController < ApplicationController
 	def index
-		@companies = Company.all
+		if params[:sort].present? && params[:direction].present?
+			@companies = Company.order(params[:sort] + ' ' + params[:direction]) 
+		else
+			@companies = Company.all
+		end
 		update_data unless Company.all.empty?
 	end
 
@@ -104,7 +108,7 @@ class CompaniesController < ApplicationController
 		Company.all.each do |company|
 			yahoo = yahoo_client.quote(company.ticker)
 			company.price = yahoo.last_trade_price.to_f
-			company.change = yahoo.change.to_f / yahoo.previous_close.to_f
+			company.price_change_pct = yahoo.change.to_f / yahoo.previous_close.to_f
 
 			filename = company.ticker + '.html'
 			filepath = Rails.root.join('data/' + filename)

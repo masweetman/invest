@@ -11,16 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150825172635) do
+ActiveRecord::Schema.define(version: 4) do
 
   create_table "companies", force: :cascade do |t|
-    t.string   "ticker",        limit: 255
-    t.float    "price",         limit: 24
-    t.float    "change",        limit: 24
-    t.float    "calculated_pe", limit: 24
-    t.float    "div_yield",     limit: 24
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.string   "ticker",           limit: 255
+    t.float    "price",            limit: 24
+    t.float    "price_change_pct", limit: 24
+    t.float    "calculated_pe",    limit: 24
+    t.float    "div_yield",        limit: 24
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   create_table "dividends", force: :cascade do |t|

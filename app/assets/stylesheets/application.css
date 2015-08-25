@@ -41,6 +41,10 @@ table th {
     background-color: gray;
 }
 
+table th a {
+    color: white !important;
+}
+
 table tr:nth-child(even) {
     background-color: #eee;
 }
