@@ -2,9 +2,6 @@
 <p>
 	<%= link_to 'Add Company', new_company_path %>
 </p>
-<p>
-	<%= link_to 'Update Data', {:controller => 'companies', :action => 'update_data'}, :remote => true %>
-</p>
 
 <% years = [] %>
 <% years[0] = Date.current.year %>
@@ -16,7 +13,7 @@
 <% years[6] = (Date.current - 6.year).year %>
 <% years[7] = (Date.current - 7.year).year %>
 
-<table>
+<table align="center">
 	<thead>
 		<th>ID</th>
 		<th>Ticker</th>
