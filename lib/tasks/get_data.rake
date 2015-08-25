@@ -7,12 +7,12 @@ namespace :invest do
 			command += ' ' + Rails.root.to_s
 			sh command
 		end
-		if LastUpdated.first.nil?
-			u = LastUpdated.create
+		if Setting.find_by_name("last_updated").nil?
+			s = Setting.create
 		else
-			u = LastUpdated.first
+			s = Setting.find_by_name("last_updated")
 		end
-		u.last_updated = Date.current
-		u.save
+		s.value = Date.current.to_s
+		s.save
 	end
 end

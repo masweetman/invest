@@ -1,7 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  last_updated: 2015-08-24
+  name: MyString
+  value: MyText
 
 two:
-  last_updated: 2015-08-24
+  name: MyString
+  value: MyText
