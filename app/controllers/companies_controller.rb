@@ -19,7 +19,7 @@ class CompaniesController < ApplicationController
 		@company = Company.new(company_params)
 
 		if @company.save
-			redirect_to @company
+			redirect_to companies_path
 		else
 			render 'new'
 		end

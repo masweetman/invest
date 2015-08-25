@@ -1,4 +1,9 @@
 <h1>Companies</h1>
+<% unless LastUpdated.first.nil? %>
+	<p>
+		Last Updated: <%= LastUpdated.first.last_updated %>
+	</p>
+<% end %>
 <p>
 	<%= link_to 'Add Company', new_company_path %>
 </p>

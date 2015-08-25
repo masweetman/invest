@@ -7,5 +7,12 @@ namespace :invest do
 			command += ' ' + Rails.root.to_s
 			sh command
 		end
+		if LastUpdated.first.nil?
+			u = LastUpdated.create
+		else
+			u = LastUpdated.first
+		end
+		u.last_updated = Date.current
+		u.save
 	end
 end
