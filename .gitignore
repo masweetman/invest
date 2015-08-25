@@ -13,4 +13,4 @@
 /tmp
 
 # Ignore data
-/data/*
+/data/*.html
