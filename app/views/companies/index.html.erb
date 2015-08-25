@@ -26,16 +26,18 @@
 		<% end %>
 	</thead>
 	<% @companies.each do |company| %>
-	<tr>
-		<td><%= company.id %></td>
-		<td><%= link_to company.ticker, company %></td>
-		<td><%= number_with_precision(company.price, precision: 2) %></td>
-		<td><%= number_to_percentage(company.change * 100, precision: 2) %></td>
-		<td><%= number_with_precision(company.calculated_pe, precision: 1) %></td>
-		<td><%= number_to_percentage(company.div_yield * 100, precision: 2) %></td>
-		<% years.each do |year| %>
-			<td><%= company.earnings.where(year: year).last.value unless company.earnings.where(year: year).empty? %></td>
-		<% end %>
-	</tr>
+		<% text_color = 'color: green !important;' if !company.change.nil? && company.change >= 0 %>
+		<% text_color = 'color: red !important;' if !company.change.nil? && company.change < 0 %>
+		<tr>
+			<td><%= company.id %></td>
+			<td><%= link_to company.ticker, company %></td>
+			<td><%= number_with_precision(company.price, precision: 2) %></td>
+			<td style='<%= text_color %>'><%= number_to_percentage(company.change * 100, precision: 2) if !company.change.nil? %></td>
+			<td><%= number_with_precision(company.calculated_pe, precision: 1) %></td>
+			<td><%= number_to_percentage(company.div_yield * 100, precision: 2) if !company.div_yield.nil? %></td>
+			<% years.each do |year| %>
+				<td><%= company.earnings.where(year: year).last.value unless company.earnings.where(year: year).empty? %></td>
+			<% end %>
+		</tr>
 	<% end %>
 </table>

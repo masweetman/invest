@@ -25,6 +25,19 @@ class CompaniesController < ApplicationController
 		end
 	end
 
+	def destroy
+		@company = Company.find(params[:id])
+		@company.earnings.each do |e|
+			e.destroy
+		end
+		@company.dividends.each do |d|
+			d.destroy
+		end
+		@company.destroy
+
+		redirect_to companies_path
+	end
+
 	def update_eps(company, page)
 		titles = page.css('table.r_table1 thead tr th[id^="Y"]').map do |i|
 			i.content
@@ -87,12 +100,16 @@ class CompaniesController < ApplicationController
 
 	def update_data
 		yahoo_client = YahooFinance::Client.new
+
 		Company.all.each do |company|
+			yahoo = yahoo_client.quote(company.ticker)
+			company.price = yahoo.last_trade_price.to_f
+			company.change = yahoo.change.to_f / yahoo.previous_close.to_f
+
 			filename = company.ticker + '.html'
 			filepath = Rails.root.join('data/' + filename)
 
 			if File.exist? filepath
-				yahoo = yahoo_client.quote(company.ticker)
 				page = Nokogiri::HTML(open(filepath))
 				update_eps(company, page)
 				
@@ -103,12 +120,11 @@ class CompaniesController < ApplicationController
 				last_div = company.dividends.map{ |d| d.year }.max
 				dividend = company.dividends.where(year: last_div).last.value
 				
-				company.price = yahoo.last_trade_price.to_f
-				company.change = yahoo.change.to_f / yahoo.previous_close.to_f
 				company.calculated_pe = yahoo.last_trade_price.to_f / average
 				company.div_yield = dividend / yahoo.last_trade_price.to_f
-				company.save
 			end
+
+			company.save
 
 		end
 	end

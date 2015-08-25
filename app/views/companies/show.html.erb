@@ -1,4 +1,40 @@
 <h1><%= @company.ticker %></h1>
-
+<p>
+<%= link_to 'Delete Company', company_path(@company),
+              method: :delete,
+              data: { confirm: 'Are you sure?' } %>
+</p>
+<p>
 <%= link_to 'Back', companies_path %>
+</p>
 
+<% years = [] %>
+<% years[0] = Date.current.year %>
+<% years[1] = (Date.current - 1.year).year %>
+<% years[2] = (Date.current - 2.year).year %>
+<% years[3] = (Date.current - 3.year).year %>
+<% years[4] = (Date.current - 4.year).year %>
+<% years[5] = (Date.current - 5.year).year %>
+<% years[6] = (Date.current - 6.year).year %>
+<% years[7] = (Date.current - 7.year).year %>
+
+<table align="center">
+	<thead>
+		<th>Financials</th>
+		<% years.each do |year| %>
+			<th><%= year.to_s %></th>
+		<% end %>
+	</thead>
+	<tr>
+		<td><strong>Earnings Per Share</strong></td>
+		<% years.each do |year| %>
+			<td><%= @company.earnings.where(year: year).last.value unless @company.earnings.where(year: year).empty? %></td>
+		<% end %>
+	</tr>
+	<tr>
+		<td><strong>Dividends</strong></td>
+		<% years.each do |year| %>
+			<td><%= @company.dividends.where(year: year).last.value unless @company.dividends.where(year: year).empty? %></td>
+		<% end %>
+	</tr>
+</table>
