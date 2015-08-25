@@ -92,21 +92,21 @@ class CompaniesController < ApplicationController
 			filepath = Rails.root.join('data/' + filename)
 
 			if File.exist? filepath
+				yahoo = yahoo_client.quote(company.ticker)
 				page = Nokogiri::HTML(open(filepath))
 				update_eps(company, page)
 				
 				earnings = company.earnings.where('year >= ? AND year <= ?',Date.current.year - 6, Date.current.year).map { |e| e.value }
 				average = earnings.sum / earnings.length.to_f
-				price = yahoo_client.quote(company.ticker).last_trade_price.to_f
 
 				update_div(company, page)
 				last_div = company.dividends.map{ |d| d.year }.max
 				dividend = company.dividends.where(year: last_div).last.value
 				
-				company.price = price
-				company.change = yahoo_client.quote(company.ticker).change.to_f
-				company.calculated_pe = price / average
-				company.div_yield = dividend / price
+				company.price = yahoo.last_trade_price.to_f
+				company.change = yahoo.change.to_f / yahoo.previous_close.to_f
+				company.calculated_pe = yahoo.last_trade_price.to_f / average
+				company.div_yield = dividend / yahoo.last_trade_price.to_f
 				company.save
 			end
 
