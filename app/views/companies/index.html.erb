@@ -1,0 +1,36 @@
+<h1>Companies</h1>
+<p>
+	<%= link_to 'Add Company', new_company_path %>
+</p>
+<p>
+	<%= link_to 'Update Data', {:controller => 'companies', :action => 'update_data'}, :remote => true %>
+</p>
+
+<% years = [] %>
+<% years[0] = Date.current.year %>
+<% years[1] = (Date.current - 1.year).year %>
+<% years[2] = (Date.current - 2.year).year %>
+<% years[3] = (Date.current - 3.year).year %>
+<% years[4] = (Date.current - 4.year).year %>
+<% years[5] = (Date.current - 5.year).year %>
+<% years[6] = (Date.current - 6.year).year %>
+<% years[7] = (Date.current - 7.year).year %>
+
+<table>
+	<thead>
+		<th>ID</th>
+		<th>Ticker</th>
+		<% years.each do |year| %>
+			<th><%= year.to_s + ' EPS' %></th>
+		<% end %>
+	</thead>
+	<% @companies.each do |company| %>
+	<tr>
+		<td><%= company.id %></td>
+		<td><%= link_to company.ticker, company %></td>
+		<% years.each do |year| %>
+			<td><%= company.earnings.where(year: year).last.value unless company.earnings.where(year: year).empty? %></td>
+		<% end %>
+	</tr>
+	<% end %>
+</table>

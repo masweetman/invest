@@ -1,0 +1,2 @@
+class EarningsController < ApplicationController
+end
