@@ -5,7 +5,7 @@
 	</p>
 <% end %>
 <p>
-	<%= link_to 'Add Company', new_company_path %>
+	<%= link_to 'Update Data', {:controller => 'companies', :action => 'update_data'}, :remote => true %>
 </p>
 
 <% years = [] %>

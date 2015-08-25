@@ -8,7 +8,6 @@ class CompaniesController < ApplicationController
 		else
 			@companies = Company.all
 		end
-		update_data unless Company.all.empty?
 	end
 
 	def show
@@ -40,6 +39,21 @@ class CompaniesController < ApplicationController
 		@company.destroy
 
 		redirect_to companies_path
+	end
+
+	def update_tickers
+		yahoo_client = YahooFinance::Client.new
+		nyse_tickers = yahoo_client.symbols_by_market('us', 'nyse')
+		nasdaq_tickers = yahoo_client.symbols_by_market('us', 'nasdaq')
+		tickers = nyse_tickers + nasdaq_tickers
+		companies = Company.all.map{ |c| c.ticker }
+		new_companies = tickers - companies
+
+		new_companies.each do |n|
+			c = Company.create
+			c.ticker = n
+			c.save
+		end
 	end
 
 	def update_eps(company, page)
@@ -103,12 +117,15 @@ class CompaniesController < ApplicationController
 	end
 
 	def update_data
+		update_tickers
+
 		yahoo_client = YahooFinance::Client.new
 
 		Company.all.each do |company|
 			yahoo = yahoo_client.quote(company.ticker)
 			company.price = yahoo.last_trade_price.to_f
-			company.price_change_pct = yahoo.change.to_f / yahoo.previous_close.to_f
+			company.price_change_pct = 0
+			company.price_change_pct = yahoo.change.to_f / yahoo.previous_close.to_f unless yahoo.previous_close.to_f == 0
 
 			filename = company.ticker + '.html'
 			filepath = Rails.root.join('data/' + filename)
