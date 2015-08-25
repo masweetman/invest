@@ -43,16 +43,18 @@ class CompaniesController < ApplicationController
 
 	def update_tickers
 		yahoo_client = YahooFinance::Client.new
-		nyse_tickers = yahoo_client.symbols_by_market('us', 'nyse')
-		nasdaq_tickers = yahoo_client.symbols_by_market('us', 'nasdaq')
+		nyse_tickers = yahoo_client.symbols_by_market('us', 'nyse').map{ |t| t.gsub('.','-') }
+		nasdaq_tickers = yahoo_client.symbols_by_market('us', 'nasdaq').map{ |t| t.gsub('.','-') }
 		tickers = nyse_tickers + nasdaq_tickers
 		companies = Company.all.map{ |c| c.ticker }
 		new_companies = tickers - companies
 
 		new_companies.each do |n|
-			c = Company.create
-			c.ticker = n
-			c.save
+			unless n.include? '^'
+				c = Company.create
+				c.ticker = n
+				c.save
+			end
 		end
 	end
 
@@ -124,10 +126,9 @@ class CompaniesController < ApplicationController
 		Company.all.each do |company|
 			yahoo = yahoo_client.quote(company.ticker)
 			company.price = yahoo.last_trade_price.to_f
-			company.price_change_pct = 0
 			company.price_change_pct = yahoo.change.to_f / yahoo.previous_close.to_f unless yahoo.previous_close.to_f == 0
 
-			filename = company.ticker + '.html'
+			filename = company.ticker.gsub('-','.') + '.html'
 			filepath = Rails.root.join('data/' + filename)
 
 			if File.exist? filepath
