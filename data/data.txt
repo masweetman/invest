@@ -1,0 +1,1 @@
+Scraped data will be placed in this folder by running rake invest:get_data
