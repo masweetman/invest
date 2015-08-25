@@ -20,6 +20,10 @@
 	<thead>
 		<th>ID</th>
 		<th>Ticker</th>
+		<th>Price</th>
+		<th>Change</th>
+		<th>PE</th>
+		<th>Yield</th>
 		<% years.each do |year| %>
 			<th><%= year.to_s + ' EPS' %></th>
 		<% end %>
@@ -28,6 +32,10 @@
 	<tr>
 		<td><%= company.id %></td>
 		<td><%= link_to company.ticker, company %></td>
+		<td><%= number_with_precision(company.price, precision: 2) %></td>
+		<td><%= number_to_percentage(company.change, precision: 2) %></td>
+		<td><%= number_with_precision(company.calculated_pe, precision: 1) %></td>
+		<td><%= number_to_percentage(company.div_yield * 100, precision: 2) %></td>
 		<% years.each do |year| %>
 			<td><%= company.earnings.where(year: year).last.value unless company.earnings.where(year: year).empty? %></td>
 		<% end %>
