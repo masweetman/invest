@@ -13,6 +13,14 @@ class Financials
 		update_ratios(company)
 	end
 
+	def get_data(company)
+		command = 'casperjs '
+		command += Rails.root.join('app/assets/javascripts/get_data.js').to_s
+		command += ' ' + company.ticker.gsub('-','.')
+		command += ' ' + Rails.root.to_s
+		result = %x[ #{command} ]
+	end
+
 	def update_all_tickers
 		companies = Company.all.map{ |c| c.ticker }
 
@@ -59,7 +67,11 @@ class Financials
 		filename = company.ticker.gsub('-','.') + '.html'
 		filepath = Rails.root.join('data/' + filename)
 
-		if File.exist? filepath
+		if !(File.exist? filepath)
+			get_data(company)
+		end
+
+		if (File.exist? filepath)
 			page = Nokogiri::HTML(open(filepath))
 
 			update_eps(company, page)

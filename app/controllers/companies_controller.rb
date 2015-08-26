@@ -13,7 +13,7 @@ class CompaniesController < ApplicationController
 	def show
 		@company = Company.find(params[:id])
 		financials = Financials.new
-		financials.get_quote(@company)
+		financials.update_ratios(@company)
 	end
 	
 	def new

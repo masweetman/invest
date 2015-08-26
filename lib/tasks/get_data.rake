@@ -3,13 +3,12 @@ require 'financials'
 namespace :invest do
 
 	task :get_data => :environment do
+		financials = Financials.new
+
 		Company.all.each do |company|
-			command = 'casperjs '
-			command += Rails.root.join('app/assets/javascripts/get_data.js').to_s
-			command += ' ' + company.ticker.gsub('-','.')
-			command += ' ' + Rails.root.to_s
-			sh command
+			financials.get_data(company)
 		end
+		
 		if Setting.find_by_name("last_updated").nil?
 			s = Setting.create
 		else
@@ -17,5 +16,15 @@ namespace :invest do
 		end
 		s.value = Date.current.to_s
 		s.save
+	end
+
+	task :update_ratios => :environment do
+		financials = Financials.new
+
+		financials.update_all_quotes
+
+		Company.all.each do |company|
+			financials.update_ratios(company)
+		end
 	end
 end

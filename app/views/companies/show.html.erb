@@ -1,11 +1,11 @@
 <h1><%= @company.ticker %></h1>
 <p>
-<%= link_to 'Delete Company', company_path(@company),
+	<%= link_to 'Delete Company', company_path(@company),
               method: :delete,
               data: { confirm: 'Are you sure?' } %>
 </p>
 <p>
-<%= link_to 'Back', companies_path %>
+	<%= link_to 'Back', companies_path %>
 </p>
 
 <% years = [] %>
