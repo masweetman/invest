@@ -14,8 +14,8 @@ class CompaniesController < ApplicationController
 	def show
 		@company = Company.find(params[:id])
 		yahoo_client = YahooFinance::Client.new
-
 		quote = yahoo_client.quote(@company.ticker)
+		
 		update_quote(@company, quote)
 		update_ratios(@company)
 	end
@@ -48,11 +48,11 @@ class CompaniesController < ApplicationController
 	end
 
 	def update
-		update_tickers if params[:element] == 'tickers'
-		update_quotes if params[:element] == 'quotes'
+		update_all_tickers if params[:element] == 'tickers'
+		update_all_quotes if params[:element] == 'quotes'
 	end
 
-	def update_tickers
+	def update_all_tickers
 		yahoo_client = YahooFinance::Client.new
 		companies = Company.all.map{ |c| c.ticker }
 
@@ -79,7 +79,7 @@ class CompaniesController < ApplicationController
 		end
 	end
 
-	def update_quotes
+	def update_all_quotes
 		yahoo_client = YahooFinance::Client.new
 		quotes = yahoo_client.quotes(Company.all.map{ |c| c.ticker })
 		quotes.map{ |q|
