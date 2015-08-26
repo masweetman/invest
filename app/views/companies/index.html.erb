@@ -22,8 +22,8 @@
 		<th><%= sortable 'div_yield', 'Yield' %></th>
 	</thead>
 	<% @companies.each do |company| %>
-		<% text_color = 'color: green !important;' if !company.price_change_pct.nil? && company.price_change_pct >= 0 %>
-		<% text_color = 'color: red !important;' if !company.price_change_pct.nil? && company.price_change_pct < 0 %>
+		<% text_color = 'color: green !important;' if company.price_change_pct? && company.price_change_pct >= 0 %>
+		<% text_color = 'color: red !important;' if company.price_change_pct? && company.price_change_pct < 0 %>
 		<tr>
 			<td><%= company.id %></td>
 			<td><%= link_to company.ticker, company %></td>

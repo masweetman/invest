@@ -18,6 +18,32 @@
 <% years[6] = (Date.current - 6.year).year %>
 <% years[7] = (Date.current - 7.year).year %>
 
+<% text_color = 'color: green !important;' if @company.price_change_pct? && @company.price_change_pct >= 0 %>
+<% text_color = 'color: red !important;' if @company.price_change_pct? && @company.price_change_pct < 0 %>
+
+<table align="center" style='text-align: left;'>
+	<tr style="background-color: #fff;">
+		<td><strong>Ticker</strong></td>
+		<td><%= @company.ticker %></td>
+		<td><strong>Change</strong></td>
+		<td style='<%= text_color %>'><%= number_to_percentage(@company.price_change_pct * 100, precision: 2) if @company.price_change_pct?%></td>
+	</tr>
+	<tr style="background-color: #fff;">
+		<td><strong>Exchange</strong></td>
+		<td><%= @company.exchange %></td>
+		<td><strong>P/E</strong></td>
+		<td><%= number_with_precision(@company.calculated_pe, precision: 1) %></td>
+	</tr>
+	<tr style="background-color: #fff;">
+		<td><strong>Price</strong></td>
+		<td><%= number_with_precision(@company.price, precision: 2) %></td>
+		<td><strong>Div Yield</strong></td>
+		<td><%= number_to_percentage(@company.div_yield * 100, precision: 2) if @company.div_yield?%></td>
+	</tr>
+</table>
+
+<br>
+
 <table align="center">
 	<thead>
 		<th>Financials</th>
