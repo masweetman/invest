@@ -13,7 +13,15 @@ class CompaniesController < ApplicationController
 	def show
 		@company = Company.find(params[:id])
 		financials = Financials.new
-		financials.update_ratios(@company)
+
+		filename = @company.ticker.gsub('-','.') + '.html'
+		filepath = Rails.root.join('data/' + filename)
+
+		if !(File.exist? filepath)
+			financials.get_data(@company)
+		end
+
+		financials.get_quote(@company)
 	end
 	
 	def new
@@ -46,6 +54,7 @@ class CompaniesController < ApplicationController
 	def update
 		financials = Financials.new
 		financials.update_all_tickers if params[:element] == 'tickers'
+		financials.update_all_ratio_data if params[:element] == 'data'
 		financials.update_all_quotes if params[:element] == 'quotes'
 	end
 

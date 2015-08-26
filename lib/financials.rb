@@ -52,7 +52,14 @@ class Financials
 		quotes.map{ |q|
 			c = Company.find_by_ticker(q.symbol)
 			update_quote(c, q)
+			update_ratios(company)
 		}
+	end
+
+	def update_all_ratio_data
+		Company.all.each do |company|
+			get_data(company)
+		end
 	end
 
 	def update_quote(company, quote)
@@ -67,11 +74,7 @@ class Financials
 		filename = company.ticker.gsub('-','.') + '.html'
 		filepath = Rails.root.join('data/' + filename)
 
-		if !(File.exist? filepath)
-			get_data(company)
-		end
-
-		if (File.exist? filepath)
+		if File.exist? filepath
 			page = Nokogiri::HTML(open(filepath))
 
 			update_eps(company, page)
@@ -82,7 +85,11 @@ class Financials
 			update_div(company, page)
 
 			last_div = company.dividends.map{ |d| d.year }.max
-			dividend = company.dividends.where(year: last_div).last.value
+			if company.dividends.where(year: last_div).any?
+				dividend = company.dividends.where(year: last_div).last.value.to_f
+			else
+				dividend = 0.0
+			end
 			
 			company.calculated_pe = company.price.to_f / average unless average.to_f == 0
 			company.div_yield = dividend / company.price.to_f unless company.price.to_f ==0
@@ -107,17 +114,16 @@ class Financials
 					earnings_per_share[dateComponents[0].to_i] = eps[earnings].to_f
 				end
 			end
-		end
-
-		earnings_per_share.each do |eps|
-			if company.earnings.where(year: eps[0]).empty?
-				e = company.earnings.create
-			else
-				e = company.earnings.where(year: eps[0]).last
+			earnings_per_share.each do |eps|
+				if company.earnings.where(year: eps[0]).empty?
+					e = company.earnings.create
+				else
+					e = company.earnings.where(year: eps[0]).last
+				end
+				e.year = eps[0]
+				e.value = eps[1]
+				e.save
 			end
-			e.year = eps[0]
-			e.value = eps[1]
-			e.save
 		end
 	end
 
@@ -137,17 +143,16 @@ class Financials
 					dividends[dateComponents[0].to_i] = divs[dividend].to_f
 				end
 			end
-		end
-
-		dividends.each do |divs|
-			if company.dividends.where(year: divs[0]).empty?
-				d = company.dividends.create
-			else
-				d = company.dividends.where(year: divs[0]).last
+			dividends.each do |divs|
+				if company.dividends.where(year: divs[0]).empty?
+					d = company.dividends.create
+				else
+					d = company.dividends.where(year: divs[0]).last
+				end
+				d.year = divs[0]
+				d.value = divs[1]
+				d.save
 			end
-			d.year = divs[0]
-			d.value = divs[1]
-			d.save
 		end
 	end
 
