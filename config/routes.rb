@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     resources :earnings
   end
 
-  get 'update_data', to: 'companies#update_data'
+  get 'update', to: 'companies#update'
   
   root 'companies#index'
 

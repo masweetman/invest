@@ -2,6 +2,7 @@ class CreateCompanies < ActiveRecord::Migration
   def change
     create_table :companies do |t|
       t.string :ticker
+      t.string :exchange
       t.float :price
       t.float :price_change_pct
       t.float :calculated_pe

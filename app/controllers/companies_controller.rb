@@ -2,6 +2,7 @@ require 'nokogiri'
 require 'open-uri'
 
 class CompaniesController < ApplicationController
+
 	def index
 		if params[:sort].present? && params[:direction].present?
 			@companies = Company.order(params[:sort] + ' ' + params[:direction]) 
@@ -41,21 +42,49 @@ class CompaniesController < ApplicationController
 		redirect_to companies_path
 	end
 
+	def update
+		update_tickers if params[:element] == 'tickers'
+		update_quotes if params[:element] == 'quotes'
+	end
+
 	def update_tickers
 		yahoo_client = YahooFinance::Client.new
-		nyse_tickers = yahoo_client.symbols_by_market('us', 'nyse').map{ |t| t.gsub('.','-') }
-		nasdaq_tickers = yahoo_client.symbols_by_market('us', 'nasdaq').map{ |t| t.gsub('.','-') }
-		tickers = nyse_tickers + nasdaq_tickers
 		companies = Company.all.map{ |c| c.ticker }
-		new_companies = tickers - companies
 
+		tickers = yahoo_client.symbols_by_market('us', 'nyse').map{ |t| t.gsub('.','-') }
+		new_companies = tickers - companies
 		new_companies.each do |n|
 			unless n.include? '^'
 				c = Company.create
 				c.ticker = n
+				c.exchange = 'NYSE'
 				c.save
 			end
 		end
+
+		tickers = yahoo_client.symbols_by_market('us', 'nasdaq').map{ |t| t.gsub('.','-') }
+		new_companies = tickers - companies
+		new_companies.each do |n|
+			unless n.include? '^'
+				c = Company.create
+				c.ticker = n
+				c.exchange = 'NASDAQ'
+				c.save
+			end
+		end
+	end
+
+	def update_quotes
+		yahoo_client = YahooFinance::Client.new
+		quotes = yahoo_client.quotes(Company.all.map{ |c| c.ticker })
+		quotes.map{ |q|
+			c = Company.find_by_ticker(q.symbol)
+			unless c.nil?
+				c.price = q.last_trade_price.to_f
+				c.price_change_pct = q.change.to_f / q.previous_close.to_f unless q.previous_close.to_f == 0
+				c.save
+			end
+		}
 	end
 
 	def update_eps(company, page)

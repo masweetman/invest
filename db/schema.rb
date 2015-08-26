@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 4) do
 
   create_table "companies", force: :cascade do |t|
     t.string   "ticker",           limit: 255
+    t.string   "exchange",         limit: 255
     t.float    "price",            limit: 24
     t.float    "price_change_pct", limit: 24
     t.float    "calculated_pe",    limit: 24

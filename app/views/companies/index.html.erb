@@ -5,30 +5,21 @@
 	</p>
 <% end %>
 <p>
-	<%= link_to 'Update Data', {:controller => 'companies', :action => 'update_data'}, :remote => true %>
+	<%= link_to 'Update Tickers', {:controller => 'companies', :action => 'update', :element => 'tickers'}, :remote => true %>
 </p>
-
-<% years = [] %>
-<% years[0] = Date.current.year %>
-<% years[1] = (Date.current - 1.year).year %>
-<% years[2] = (Date.current - 2.year).year %>
-<% years[3] = (Date.current - 3.year).year %>
-<% years[4] = (Date.current - 4.year).year %>
-<% years[5] = (Date.current - 5.year).year %>
-<% years[6] = (Date.current - 6.year).year %>
-<% years[7] = (Date.current - 7.year).year %>
+<p>
+	<%= link_to 'Update Quotes', {:controller => 'companies', :action => 'update', :element => 'quotes'}, :remote => true %>
+</p>
 
 <table align="center">
 	<thead>
 		<th><%= sortable 'id', 'ID' %></th>
 		<th><%= sortable 'ticker' %></th>
+		<th><%= sortable 'exchange' %></th>
 		<th><%= sortable 'price' %></th>
 		<th><%= sortable 'price_change_pct', 'Change' %></th>
 		<th><%= sortable 'calculated_pe', 'PE' %></th>
 		<th><%= sortable 'div_yield', 'Yield' %></th>
-		<% years.each do |year| %>
-			<th><%= year.to_s + ' EPS' %></th>
-		<% end %>
 	</thead>
 	<% @companies.each do |company| %>
 		<% text_color = 'color: green !important;' if !company.price_change_pct.nil? && company.price_change_pct >= 0 %>
@@ -36,13 +27,11 @@
 		<tr>
 			<td><%= company.id %></td>
 			<td><%= link_to company.ticker, company %></td>
-			<td><%= number_with_precision(company.price, precision: 2) %></td>
-			<td style='<%= text_color %>'><%= number_to_percentage(company.price_change_pct * 100, precision: 2) if !company.price_change_pct.nil? %></td>
-			<td><%= number_with_precision(company.calculated_pe, precision: 1) %></td>
-			<td><%= number_to_percentage(company.div_yield * 100, precision: 2) if !company.div_yield.nil? %></td>
-			<% years.each do |year| %>
-				<td><%= company.earnings.where(year: year).last.value unless company.earnings.where(year: year).empty? %></td>
-			<% end %>
+			<td><%= company.exchange %></td>
+			<td><%= number_with_precision(company.price, precision: 2) if company.price? %></td>
+			<td style='<%= text_color %>'><%= number_to_percentage(company.price_change_pct * 100, precision: 2) if company.price_change_pct? %></td>
+			<td><%= number_with_precision(company.calculated_pe, precision: 1) if company.calculated_pe? %></td>
+			<td><%= number_to_percentage(company.div_yield * 100, precision: 2) if company.div_yield? %></td>
 		</tr>
 	<% end %>
 </table>
