@@ -1,4 +1,7 @@
+require 'financials'
+
 namespace :invest do
+
 	task :get_data => :environment do
 		Company.all.each do |company|
 			command = 'casperjs '
