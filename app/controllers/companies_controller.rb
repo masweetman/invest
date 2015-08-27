@@ -14,11 +14,8 @@ class CompaniesController < ApplicationController
 		@company = Company.find(params[:id])
 		financials = Financials.new
 
-		filename = @company.ticker.gsub('-','.') + '.html'
-		filepath = Rails.root.join('data/' + filename)
-
-		if !(File.exist? filepath)
-			financials.get_data_np(@company)
+		if @company.earnings.empty?
+			financials.get_data(@company)
 		end
 
 		financials.get_quote(@company)

@@ -18,15 +18,10 @@ class Financials
 		command += Rails.root.join('app/assets/javascripts/get_data.js').to_s
 		command += ' ' + company.ticker.gsub('-','.')
 		command += ' ' + Rails.root.to_s
-		result = %x[ #{command} ]
-	end
-
-	def get_data_np(company)
-		command = 'casperjs '
-		command += Rails.root.join('app/assets/javascripts/get_data_np.js').to_s
-		command += ' ' + company.ticker.gsub('-','.')
-		command += ' ' + Rails.root.to_s
-		result = %x[ #{command} ]
+		html = %x[ #{command} ]
+		html = Nokogiri::HTML(html)
+		update_data(company, html)
+		update_ratios(company)
 	end
 
 	def update_all_tickers
@@ -67,6 +62,7 @@ class Financials
 	def update_all_ratio_data
 		Company.all.each do |company|
 			get_data(company)
+			sleep(5)
 		end
 	end
 
@@ -79,38 +75,32 @@ class Financials
 	end
 
 	def update_ratios(company)
-		filename = company.ticker.gsub('-','.') + '.html'
-		filepath = Rails.root.join('data/' + filename)
+		earnings = company.earnings.where('year >= ? AND year <= ?', Date.current.year - 6, Date.current.year).map { |e| e.value }
+		average = earnings.sum / earnings.length.to_f unless earnings.length.to_f == 0
 
-		if File.exist? filepath
-			page = Nokogiri::HTML(open(filepath))
-
-			update_eps(company, page)
-			
-			earnings = company.earnings.where('year >= ? AND year <= ?', Date.current.year - 6, Date.current.year).map { |e| e.value }
-			average = earnings.sum / earnings.length.to_f unless earnings.length.to_f == 0
-
-			update_div(company, page)
-
-			last_div = company.dividends.map{ |d| d.year }.max
-			if company.dividends.where(year: last_div).any?
-				dividend = company.dividends.where(year: last_div).last.value.to_f
-			else
-				dividend = 0.0
-			end
-			
-			company.calculated_pe = company.price.to_f / average unless average.to_f == 0
-			company.div_yield = dividend / company.price.to_f unless company.price.to_f ==0
+		last_div = company.dividends.map{ |d| d.year }.max
+		if company.dividends.where(year: last_div).any?
+			dividend = company.dividends.where(year: last_div).last.value.to_f
+		else
+			dividend = 0.0
 		end
+		
+		company.calculated_pe = company.price.to_f / average unless average.to_f == 0
+		company.div_yield = dividend / company.price.to_f unless company.price.to_f == 0
 
 		company.save
 	end
 
-	def update_eps(company, page)
-		titles = page.css('table.r_table1 thead tr th[id^="Y"]').map do |i|
+	def update_data(company, html)
+		update_eps(company, html)
+		update_div(company, html)
+	end
+
+	def update_eps(company, html)
+		titles = html.css('table.r_table1 thead tr th[id^="Y"]').map do |i|
 			i.content
 		end
-		eps = page.css('td[headers$="i5"]').map do |i|
+		eps = html.css('td[headers$="i5"]').map do |i|
 			i.content
 		end
 
@@ -135,11 +125,11 @@ class Financials
 		end
 	end
 
-	def update_div(company, page)
-		titles = page.css('table.r_table1 thead tr th[id^="Y"]').map do |i|
+	def update_div(company, html)
+		titles = html.css('table.r_table1 thead tr th[id^="Y"]').map do |i|
 			i.content
 		end
-		divs = page.css('td[headers$="i6"]').map do |i|
+		divs = html.css('td[headers$="i6"]').map do |i|
 			i.content
 		end
 

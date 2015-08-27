@@ -1,4 +1,3 @@
-var fs = require('fs');
 var casper = require('casper').create();
 var url = 'http://financials.morningstar.com/ratios/r.html?t=';
 
@@ -15,16 +14,6 @@ casper.start().then(function() {
 });
 
 casper.run(function() {
-    filename = ticker + '.html';
-    filepath = railsroot + '/data/'
-    filepath = fs.pathJoin(filepath, filename);
-    fs.write(filepath, this.getPageContent(), 'w');
+    casper.echo(this.getPageContent());
     this.exit();
 });
-sleep(5000);
-
-function sleep(ms) {
-  var start = new Date().getTime(), expire = start + ms;
-  while (new Date().getTime() < expire) { }
-  return;
-}
