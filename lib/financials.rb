@@ -55,7 +55,7 @@ class Financials
 		quotes.map{ |q|
 			c = Company.find_by_ticker(q.symbol)
 			update_quote(c, q)
-			update_ratios(company)
+			update_ratios(c)
 		}
 	end
 
