@@ -21,6 +21,14 @@ class Financials
 		result = %x[ #{command} ]
 	end
 
+	def get_data_np(company)
+		command = 'casperjs '
+		command += Rails.root.join('app/assets/javascripts/get_data_np.js').to_s
+		command += ' ' + company.ticker.gsub('-','.')
+		command += ' ' + Rails.root.to_s
+		result = %x[ #{command} ]
+	end
+
 	def update_all_tickers
 		companies = Company.all.map{ |c| c.ticker }
 
@@ -111,7 +119,7 @@ class Financials
 			titles.each_with_index do |title, earnings|
 				if title.include?('-')
 					dateComponents = title.split /-/
-					earnings_per_share[dateComponents[0].to_i] = eps[earnings].to_f
+					earnings_per_share[dateComponents[0].to_i] = eps[earnings].to_f unless eps[earnings].to_f == 0
 				end
 			end
 			earnings_per_share.each do |eps|
@@ -140,7 +148,7 @@ class Financials
 			titles.each_with_index do |title, dividend|
 				if title.include?('-')
 					dateComponents = title.split /-/
-					dividends[dateComponents[0].to_i] = divs[dividend].to_f
+					dividends[dateComponents[0].to_i] = divs[dividend].to_f unless divs[dividend].to_f == 0 
 				end
 			end
 			dividends.each do |divs|

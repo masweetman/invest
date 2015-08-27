@@ -18,7 +18,7 @@ class CompaniesController < ApplicationController
 		filepath = Rails.root.join('data/' + filename)
 
 		if !(File.exist? filepath)
-			financials.get_data(@company)
+			financials.get_data_np(@company)
 		end
 
 		financials.get_quote(@company)
