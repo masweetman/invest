@@ -8,9 +8,33 @@ class CompaniesController < ApplicationController
 			scope = scope.order(params[:sort] + ' ' + params[:direction]) 
 		end
 		if params[:ticker].present?
-			scope = scope.where("ticker LIKE '#{params[:ticker].upcase}%'")
+			scope = scope.where("ticker LIKE '#{params[:ticker].upcase}%'").order("ticker")
+		end
+		if params[:query_id].present?
+			query = build_query(params[:query_id])
+			scope = scope.where(query)
 		end
 		@companies = scope.paginate(:page => params[:page], :per_page => 30)
+	end
+
+	def build_query(id)
+		q = Query.find(id)
+		query_params = {}
+		query_params['min_pe'] = q.min_pe if q.min_pe
+		query_params['max_pe'] = q.max_pe if q.max_pe
+
+		query = ''
+		i = 0
+
+		query_params.each do |param|
+			query += 'calculated_pe >= ' + param[1].to_s if param[0] == 'min_pe'
+			query += 'calculated_pe <= ' + param[1].to_s if param[0] == 'max_pe'
+			i += 1
+			unless i >= query_params.length
+				query += ' AND '
+			end
+		end
+		query
 	end
 
 	def show

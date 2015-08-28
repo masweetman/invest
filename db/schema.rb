@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 4) do
+ActiveRecord::Schema.define(version: 20150828211609) do
 
   create_table "companies", force: :cascade do |t|
     t.string   "ticker",           limit: 255
@@ -43,6 +43,15 @@ ActiveRecord::Schema.define(version: 4) do
   end
 
   add_index "earnings", ["company_id"], name: "index_earnings_on_company_id", using: :btree
+
+  create_table "queries", force: :cascade do |t|
+    t.string   "name",          limit: 255
+    t.float    "min_pe",        limit: 24
+    t.float    "max_pe",        limit: 24
+    t.text     "sort_criteria", limit: 65535
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
 
   create_table "settings", force: :cascade do |t|
     t.string   "name",       limit: 255

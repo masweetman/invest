@@ -1,0 +1,22 @@
+<h1>Edit Query</h1>
+
+<%= form_for :query, url: query_path(@query), method: :patch do |f| %>
+
+	<p>
+		<%= f.label 'Name:' %><br>
+		<%= f.text_field :name %>
+	</p>
+	<p>
+		<%= f.label 'Min PE:' %><br>
+		<%= f.text_field :min_pe %>
+	</p>
+	<p>
+		<%= f.label 'Max PE:' %><br>
+		<%= f.text_field :max_pe %>
+	</p>
+	<p>
+		<%= f.submit %>
+	</p>
+<% end %>
+
+<%= link_to 'Back', queries_path %>

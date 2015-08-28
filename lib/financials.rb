@@ -61,7 +61,7 @@ class Financials
 	def update_all_ratio_data
 		Company.all.each do |company|
 			get_data(company)
-			sleep(5)
+			sleep(rand(1..3))
 		end
 	end
 
