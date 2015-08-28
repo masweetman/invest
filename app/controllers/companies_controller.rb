@@ -20,7 +20,7 @@ class CompaniesController < ApplicationController
 		if @company.earnings.empty?
 			financials.get_data(@company)
 		end
-
+		
 		financials.get_quote(@company)
 	end
 	

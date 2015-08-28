@@ -7,12 +7,6 @@ class Financials
 		yahoo = YahooFinance::Client.new
 	end
 
-	def get_quote(company)
-		quote = yahoo.quote(company.ticker)
-		update_quote(company, quote)
-		update_ratios(company)
-	end
-
 	def get_data(company)
 		command = 'casperjs '
 		command += Rails.root.join('app/assets/javascripts/get_data.js').to_s
@@ -21,6 +15,11 @@ class Financials
 		html = %x[ #{command} ]
 		html = Nokogiri::HTML(html)
 		update_data(company, html)
+	end
+
+	def get_quote(company)
+		quote = yahoo.quote(company.ticker)
+		update_quote(company, quote)
 		update_ratios(company)
 	end
 
@@ -76,7 +75,7 @@ class Financials
 
 	def update_ratios(company)
 		earnings = company.earnings.where('year >= ? AND year <= ?', Date.current.year - 6, Date.current.year).map { |e| e.value }
-		average = earnings.sum / earnings.length.to_f unless earnings.length.to_f == 0
+		average = (earnings.sum.round(3) / earnings.length).round(3) unless earnings.length == 0
 
 		last_div = company.dividends.map{ |d| d.year }.max
 		if company.dividends.where(year: last_div).any?
@@ -84,7 +83,7 @@ class Financials
 		else
 			dividend = 0.0
 		end
-		
+
 		company.calculated_pe = company.price.to_f / average unless average.to_f == 0
 		company.div_yield = dividend / company.price.to_f unless company.price.to_f == 0
 
