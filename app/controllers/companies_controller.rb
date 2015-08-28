@@ -3,11 +3,14 @@ require 'financials'
 class CompaniesController < ApplicationController
 
 	def index
+		scope = Company.all
 		if params[:sort].present? && params[:direction].present?
-			@companies = Company.order(params[:sort] + ' ' + params[:direction]) 
-		else
-			@companies = Company.all
+			scope = scope.order(params[:sort] + ' ' + params[:direction]) 
 		end
+		if params[:ticker].present?
+			scope = scope.where("ticker LIKE '#{params[:ticker].upcase}%'")
+		end
+		@companies = scope.paginate(:page => params[:page], :per_page => 30)
 	end
 
 	def show

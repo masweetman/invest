@@ -1,17 +1,11 @@
 <h1>Companies</h1>
-<% unless Setting.find_by_name("last_updated").nil? %>
-	<p>
-		Last Updated: <%= Setting.find_by_name("last_updated").value %>
-	</p>
+<p>
+<%= form_tag(companies_path, :method => :get) do %>
+	<label for='ticker'><%= 'Ticker' %>:</label>
+	<%= text_field_tag 'ticker', params[:ticker] %>
+	<%= submit_tag 'Search', :ticker => nil %>
+	<%= link_to 'Clear', companies_path %>
 <% end %>
-<p>
-	<%= link_to 'Update Tickers', {:controller => 'companies', :action => 'update', :element => 'tickers'}, :remote => true %>
-</p>
-<p>
-	<%= link_to 'Update Ratio Data', {:controller => 'companies', :action => 'update', :element => 'data'}, :remote => true %>
-</p>
-<p>
-	<%= link_to 'Update Quotes', {:controller => 'companies', :action => 'update', :element => 'quotes'}, :remote => true %>
 </p>
 
 <table align="center">
@@ -38,3 +32,21 @@
 		</tr>
 	<% end %>
 </table>
+<p>
+<%= will_paginate @companies %>
+</p>
+<br>
+<p>
+	<%= link_to 'Update Tickers', {:controller => 'companies', :action => 'update', :element => 'tickers'}, :remote => true %>
+</p>
+<p>
+	<%= link_to 'Update Ratio Data', {:controller => 'companies', :action => 'update', :element => 'data'}, :remote => true %>
+</p>
+<p>
+	<%= link_to 'Update Quotes', {:controller => 'companies', :action => 'update', :element => 'quotes'}, :remote => true %>
+</p>
+<% unless Setting.find_by_name("last_updated").nil? %>
+	<p>
+		Last Updated: <%= Setting.find_by_name("last_updated").value %>
+	</p>
+<% end %>
