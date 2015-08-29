@@ -13,6 +13,8 @@
 <% text_color = 'color: green !important;' if @company.price_change_pct? && @company.price_change_pct >= 0 %>
 <% text_color = 'color: red !important;' if @company.price_change_pct? && @company.price_change_pct < 0 %>
 
+<p><%= link_to 'Yahoo Quote', 'http://finance.yahoo.com/q?s=' + @company.ticker, :target => '_blank' %></p>
+<p><%= link_to 'Google Quote', 'https://www.google.com/finance?q=' + @company.ticker, :target => '_blank' %></p>
 <p><%= link_to 'Morningstar Financials', 'http://financials.morningstar.com/ratios/r.html?t=' + @company.ticker, :target => '_blank' %></p>
 <p><%= link_to 'SEC Form 10-k', 'http://www.sec.gov/cgi-bin/browse-edgar?type=10-k&Find=Search&owner=exclude&action=getcompany&CIK=' + @company.ticker, :target => '_blank' %></p>
 
