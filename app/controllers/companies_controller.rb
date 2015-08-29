@@ -18,6 +18,8 @@ class CompaniesController < ApplicationController
 		query_params['max_pe'] = q.max_pe if q.max_pe
 		query_params['min_p_to_bv'] = q.min_p_to_bv if q.min_p_to_bv
 		query_params['max_p_to_bv'] = q.max_p_to_bv if q.max_p_to_bv
+		query_params['min_div'] = q.min_div if q.min_div
+		query_params['max_div'] = q.max_div if q.max_div
 
 		query = ''
 		i = 0
@@ -27,6 +29,8 @@ class CompaniesController < ApplicationController
 			query += 'calculated_pe <= ' + param[1].to_s if param[0] == 'max_pe'
 			query += 'p_to_bv >= ' + param[1].to_s if param[0] == 'min_p_to_bv'
 			query += 'p_to_bv <= ' + param[1].to_s if param[0] == 'max_p_to_bv'
+			query += '(div_yield*100) >= ' + param[1].to_s if param[0] == 'min_div'
+			query += '(div_yield*100) <= ' + param[1].to_s if param[0] == 'max_div'
 
 			i += 1
 			unless i >= query_params.length

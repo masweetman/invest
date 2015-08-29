@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150829011446) do
+ActiveRecord::Schema.define(version: 20150829025947) do
 
   create_table "companies", force: :cascade do |t|
     t.string   "ticker",           limit: 255
@@ -56,6 +56,8 @@ ActiveRecord::Schema.define(version: 20150829011446) do
     t.datetime "updated_at",                  null: false
     t.float    "min_p_to_bv",   limit: 24
     t.float    "max_p_to_bv",   limit: 24
+    t.float    "min_div",       limit: 24
+    t.float    "max_div",       limit: 24
   end
 
   create_table "settings", force: :cascade do |t|

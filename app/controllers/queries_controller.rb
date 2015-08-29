@@ -39,6 +39,6 @@ class QueriesController < ApplicationController
 
 private
 	def query_params
-		params.require(:query).permit(:name, :min_pe, :max_pe, :min_p_to_bv, :max_p_to_bv, :sort_criteria)
+		params.require(:query).permit(:name, :min_pe, :max_pe, :min_p_to_bv, :max_p_to_bv, :min_div, :max_div, :sort_criteria)
 	end
 end
