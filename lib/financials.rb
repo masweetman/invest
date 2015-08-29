@@ -86,13 +86,17 @@ class Financials
 
 		company.calculated_pe = company.price.to_f / average unless average.to_f == 0
 		company.div_yield = dividend / company.price.to_f unless company.price.to_f == 0
+		company.p_to_bv = company.price.to_f / company.bv_per_share.to_f unless company.bv_per_share.to_f == 0
 
 		company.save
 	end
 
 	def update_data(company, html)
+		company.name = html.css('div.wrapper div.r_bodywrap div.r_header div.reports_nav div.r_title h1')[0].content
+		company.bv_per_share = html.css('td[headers$="i8"]')[9].content.to_f
 		update_eps(company, html)
 		update_div(company, html)
+		company.save
 	end
 
 	def update_eps(company, html)

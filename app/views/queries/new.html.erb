@@ -2,21 +2,32 @@
 
 <%= form_for :query, url: queries_path do |f| %>
 
-	<p>
-		<%= f.label 'Name:' %><br>
-		<%= f.text_field :name %>
-	</p>
-	<p>
-		<%= f.label 'Min PE:' %><br>
-		<%= f.text_field :min_pe %>
-	</p>
-	<p>
-		<%= f.label 'Max PE:' %><br>
-		<%= f.text_field :max_pe %>
-	</p>
+	<table align="center">
+		<thead>
+			<th><%= f.label 'Query Name:' %></th>
+			<th><%= f.text_field :name %></th>
+		</thead>
+			<td><%= f.label 'Min PE:' %></td>
+			<td><%= f.text_field :min_pe %></td>
+		<tr>
+			<td><%= f.label 'Max PE:' %></td>
+			<td><%= f.text_field :max_pe %></td>
+		</tr>
+			<td><%= f.label 'Min Price/Book Value:' %></td>
+			<td><%= f.text_field :min_p_to_bv %></td>
+		<tr>
+			<td><%= f.label 'Max Price/Book Value:' %></td>
+			<td><%= f.text_field :max_p_to_bv %></td>
+		</tr>
+		<tr>
+			<td><%= f.label 'Sort By:' %></td>
+			<td><%= f.select :sort_criteria, options_for_select(Company.attribute_names) %></td>
+		</tr>
+	</table>
 	<p>
 		<%= f.submit %>
 	</p>
+	
 <% end %>
 
 <%= link_to 'Back', queries_path %>

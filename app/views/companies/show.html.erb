@@ -1,12 +1,4 @@
-<h1><%= @company.ticker %></h1>
-<p>
-	<%= link_to 'Delete Company', company_path(@company),
-              method: :delete,
-              data: { confirm: 'Are you sure?' } %>
-</p>
-<p>
-	<%= link_to 'Back', companies_path %>
-</p>
+<h1><%= @company.name %> - <%= @company.ticker %></h1>
 
 <% years = [] %>
 <% years[0] = Date.current.year %>
@@ -21,24 +13,37 @@
 <% text_color = 'color: green !important;' if @company.price_change_pct? && @company.price_change_pct >= 0 %>
 <% text_color = 'color: red !important;' if @company.price_change_pct? && @company.price_change_pct < 0 %>
 
+<p><%= link_to 'Morningstar Financials', 'http://financials.morningstar.com/ratios/r.html?t=' + @company.ticker, :target => '_blank' %></p>
+<p><%= link_to 'SEC Form 10-k', 'http://www.sec.gov/cgi-bin/browse-edgar?type=10-k&Find=Search&owner=exclude&action=getcompany&CIK=' + @company.ticker, :target => '_blank' %></p>
+
 <table align="center" style='text-align: left;'>
 	<tr style="background-color: #fff;">
 		<td><strong>Ticker</strong></td>
 		<td><%= @company.ticker %></td>
-		<td><strong>Change</strong></td>
-		<td style='<%= text_color %>'><%= number_to_percentage(@company.price_change_pct * 100, precision: 2) if @company.price_change_pct?%></td>
+		<td><strong>P/E</strong></td>
+		<td><%= number_with_precision(@company.calculated_pe, precision: 1) %></td>
+
 	</tr>
 	<tr style="background-color: #fff;">
 		<td><strong>Exchange</strong></td>
 		<td><%= @company.exchange %></td>
-		<td><strong>P/E</strong></td>
-		<td><%= number_with_precision(@company.calculated_pe, precision: 1) %></td>
+		<td><strong>Div Yield</strong></td>
+		<td><%= number_to_percentage(@company.div_yield * 100, precision: 2) if @company.div_yield?%></td>
+
 	</tr>
 	<tr style="background-color: #fff;">
 		<td><strong>Price</strong></td>
 		<td><%= number_with_precision(@company.price, precision: 2) %></td>
-		<td><strong>Div Yield</strong></td>
-		<td><%= number_to_percentage(@company.div_yield * 100, precision: 2) if @company.div_yield?%></td>
+		<td><strong>Book Value Per Share</strong></td>
+		<td><%= number_with_precision(@company.bv_per_share, precision: 2) %></td>
+
+
+	</tr>
+	<tr style="background-color: #fff;">
+		<td><strong>Change</strong></td>
+		<td style='<%= text_color %>'><%= number_to_percentage(@company.price_change_pct * 100, precision: 2) if @company.price_change_pct?%></td>
+		<td><strong>Price to Book Value</strong></td>
+		<td><%= number_with_precision(@company.p_to_bv, precision: 2) %></td>
 	</tr>
 </table>
 
@@ -64,3 +69,12 @@
 		<% end %>
 	</tr>
 </table>
+
+<p>
+	<%= link_to 'Delete Company', company_path(@company),
+              method: :delete,
+              data: { confirm: 'Are you sure?' } %>
+</p>
+<p>
+	<%= link_to 'Back', companies_path %>
+</p>

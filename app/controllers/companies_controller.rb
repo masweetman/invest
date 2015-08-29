@@ -11,17 +11,18 @@ class CompaniesController < ApplicationController
 			scope = scope.where("ticker LIKE '#{params[:ticker].upcase}%'").order("ticker")
 		end
 		if params[:query_id].present?
-			query = build_query(params[:query_id])
-			scope = scope.where(query)
+			scope = build_query(scope, params[:query_id])
 		end
 		@companies = scope.paginate(:page => params[:page], :per_page => 30)
 	end
 
-	def build_query(id)
-		q = Query.find(id)
+	def build_query(scope, query_id)
+		q = Query.find(query_id)
 		query_params = {}
 		query_params['min_pe'] = q.min_pe if q.min_pe
 		query_params['max_pe'] = q.max_pe if q.max_pe
+		query_params['min_p_to_bv'] = q.min_p_to_bv if q.min_p_to_bv
+		query_params['max_p_to_bv'] = q.max_p_to_bv if q.max_p_to_bv
 
 		query = ''
 		i = 0
@@ -29,22 +30,24 @@ class CompaniesController < ApplicationController
 		query_params.each do |param|
 			query += 'calculated_pe >= ' + param[1].to_s if param[0] == 'min_pe'
 			query += 'calculated_pe <= ' + param[1].to_s if param[0] == 'max_pe'
+			query += 'p_to_bv >= ' + param[1].to_s if param[0] == 'min_p_to_bv'
+			query += 'p_to_bv <= ' + param[1].to_s if param[0] == 'max_p_to_bv'
+
 			i += 1
 			unless i >= query_params.length
 				query += ' AND '
 			end
 		end
-		query
+		scope = scope.where(query)
+		scope = scope.order(q.sort_criteria) if q.sort_criteria
+		scope
 	end
 
 	def show
 		@company = Company.find(params[:id])
 		financials = Financials.new
 
-		if @company.earnings.empty?
-			financials.get_data(@company)
-		end
-		
+		financials.get_data(@company) if (@company.name.nil? || @company.updated_at.to_date <= (Date.today - 1.month))
 		financials.get_quote(@company)
 	end
 	

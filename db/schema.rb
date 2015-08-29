@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150828211609) do
+ActiveRecord::Schema.define(version: 20150829011446) do
 
   create_table "companies", force: :cascade do |t|
     t.string   "ticker",           limit: 255
@@ -22,6 +22,9 @@ ActiveRecord::Schema.define(version: 20150828211609) do
     t.float    "div_yield",        limit: 24
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+    t.string   "name",             limit: 255
+    t.float    "bv_per_share",     limit: 24
+    t.float    "p_to_bv",          limit: 24
   end
 
   create_table "dividends", force: :cascade do |t|
@@ -51,6 +54,8 @@ ActiveRecord::Schema.define(version: 20150828211609) do
     t.text     "sort_criteria", limit: 65535
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
+    t.float    "min_p_to_bv",   limit: 24
+    t.float    "max_p_to_bv",   limit: 24
   end
 
   create_table "settings", force: :cascade do |t|

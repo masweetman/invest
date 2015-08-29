@@ -19,6 +19,7 @@
 		<th><%= sortable 'price' %></th>
 		<th><%= sortable 'price_change_pct', 'Change' %></th>
 		<th><%= sortable 'calculated_pe', 'PE' %></th>
+		<th><%= sortable 'bv_per_share', 'BV/Share' %></th>
 		<th><%= sortable 'div_yield', 'Yield' %></th>
 	</thead>
 	<% @companies.each do |company| %>
@@ -31,6 +32,7 @@
 			<td><%= number_with_precision(company.price, precision: 2) if company.price? %></td>
 			<td style='<%= text_color %>'><%= number_to_percentage(company.price_change_pct * 100, precision: 2) if company.price_change_pct? %></td>
 			<td><%= number_with_precision(company.calculated_pe, precision: 1) if company.calculated_pe? %></td>
+			<td><%= number_with_precision(company.bv_per_share, precision: 2) if company.bv_per_share? %></td>
 			<td><%= number_to_percentage(company.div_yield * 100, precision: 2) if company.div_yield? %></td>
 		</tr>
 	<% end %>
