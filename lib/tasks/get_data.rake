@@ -7,6 +7,11 @@ namespace :invest do
 		financials.update_all_tickers
 	end
 
+	task :get_data => :environment do
+		financials = Financials.new
+		financials.update_all_ratio_data(Company.all)
+	end
+
 	task :get_data0 => :environment do
 		financials = Financials.new
 		financials.update_all_ratio_data(Company.where('id < 1000'))

@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
+require 'transient_cache'
 
 class Financials
 
@@ -8,13 +9,17 @@ class Financials
 	end
 
 	def get_data(company)
-		command = 'casperjs '
-		command += Rails.root.join('app/assets/javascripts/get_data.js').to_s
-		command += ' ' + company.ticker.gsub('-','.')
-		command += ' ' + Rails.root.to_s
-		html = %x[ #{command} ]
-		html = Nokogiri::HTML(html)
-		update_data(company, html)
+		c = TransientCache.new
+
+		c[:a] = 'casperjs '
+		c[:a] += Rails.root.join('app/assets/javascripts/get_data.js').to_s
+		c[:a] += ' ' + company.ticker.gsub('-','.')
+		c[:a] += ' ' + Rails.root.to_s
+		c[:h] = %x[ #{c[:a]} ]
+		c[:n] = Nokogiri::HTML(c[:h])
+		update_data(company, c[:n])
+
+		ObjectSpace.garbage_collect
 	end
 
 	def get_quote(company)
