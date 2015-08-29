@@ -93,10 +93,12 @@ class Financials
 
 	def update_data(company, html)
 		company.name = html.css('div.wrapper div.r_bodywrap div.r_header div.reports_nav div.r_title h1')[0].content if html.css('div.wrapper div.r_bodywrap div.r_header div.reports_nav div.r_title h1')[0]
-		company.bv_per_share = html.css('td[headers$="i8"]')[9].content.to_f if html.css('td[headers$="i8"]')[9]
-		update_eps(company, html)
-		update_div(company, html)
-		company.save
+		unless company.name.nil?
+			company.bv_per_share = html.css('td[headers$="i8"]')[9].content.to_f if html.css('td[headers$="i8"]')[9]
+			update_eps(company, html)
+			update_div(company, html)
+			company.save
+		end
 	end
 
 	def update_eps(company, html)
