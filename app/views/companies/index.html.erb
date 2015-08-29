@@ -4,8 +4,16 @@
 	<label for='ticker'><%= 'Ticker' %>:</label>
 	<%= text_field_tag 'ticker', params[:ticker] %>
 	<%= submit_tag 'Search', :ticker => nil %>
-	<%= link_to 'Clear', companies_path %>
 <% end %>
+<p>
+<%= form_tag(companies_path, :method => :get) do %>
+	<label for='name'><%= 'Company Name' %>:</label>
+	<%= text_field_tag 'name', params[:name] %>
+	<%= submit_tag 'Search', :ticker => nil %>
+<% end %>
+</p>
+<p>
+	<%= link_to 'Clear', companies_path %>
 </p>
 <p>
 	<%= link_to 'Queries', queries_path %>
