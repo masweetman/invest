@@ -1,4 +1,4 @@
-<h1>Edit Query</h1>
+<h2>Edit Query</h2>
 
 <%= form_for :query, url: query_path(@query), method: :patch do |f| %>
 
@@ -38,4 +38,6 @@
 	
 <% end %>
 
-<%= link_to 'Back', queries_path %>
+<p>
+	<%= link_to 'Back', queries_path %>
+</p>

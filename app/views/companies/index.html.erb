@@ -1,4 +1,4 @@
-<h1>Companies</h1>
+<h2>Companies</h2>
 <p>
 <%= form_tag(companies_path, :method => :get) do %>
 	<label for='ticker'><%= 'Ticker' %>:</label>
@@ -48,7 +48,6 @@
 <p>
 <%= will_paginate @companies %>
 </p>
-<br>
 <p>
 	<%= link_to 'Update Quotes', {:controller => 'companies', :action => 'update', :element => 'quotes'}, :remote => true %>
 </p>

@@ -1,4 +1,4 @@
-<h1><%= @company.name %> - <%= @company.ticker %></h1>
+<h2><%= @company.name %></h2>
 
 <% years = [] %>
 <% years[0] = Date.current.year %>
@@ -21,7 +21,7 @@
 <table align="center" style='text-align: left;'>
 	<tr style="background-color: #fff;">
 		<td><strong>Ticker</strong></td>
-		<td><%= @company.ticker %></td>
+		<td><strong><%= @company.ticker %></strong></td>
 		<td><strong>P/E</strong></td>
 		<td><%= number_with_precision(@company.calculated_pe, precision: 1) %></td>
 
@@ -78,5 +78,5 @@
               data: { confirm: 'Are you sure?' } %>
 </p>
 <p>
-	<%= link_to 'Back', companies_path %>
+	<%= link_to 'Back', root_url %>
 </p>
