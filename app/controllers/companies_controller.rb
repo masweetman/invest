@@ -20,6 +20,7 @@ class CompaniesController < ApplicationController
 		query_params['max_p_to_bv'] = q.max_p_to_bv if q.max_p_to_bv
 		query_params['min_div'] = q.min_div if q.min_div
 		query_params['max_div'] = q.max_div if q.max_div
+		query_params['favorites'] = q.favorites if q.favorites
 
 		query = ''
 		i = 0
@@ -31,6 +32,7 @@ class CompaniesController < ApplicationController
 			query += 'p_to_bv <= ' + param[1].to_s if param[0] == 'max_p_to_bv'
 			query += '(div_yield*100) >= ' + param[1].to_s if param[0] == 'min_div'
 			query += '(div_yield*100) <= ' + param[1].to_s if param[0] == 'max_div'
+			query += 'favorite = 1' if param[0] == 'favorites' && q.favorites == true
 
 			i += 1
 			unless i >= query_params.length
@@ -64,28 +66,29 @@ class CompaniesController < ApplicationController
 		end
 	end
 
-	def destroy
-		@company = Company.find(params[:id])
-		@company.earnings.each do |e|
-			e.destroy
-		end
-		@company.dividends.each do |d|
-			d.destroy
-		end
-		@company.destroy
-
-		redirect_to companies_path
-	end
+	#def destroy
+	#	@company = Company.find(params[:id])
+	#	@company.earnings.each do |e|
+	#		e.destroy
+	#	end
+	#	@company.dividends.each do |d|
+	#		d.destroy
+	#	end
+	#	@company.destroy
+	#
+	#	redirect_to companies_path
+	#end
 
 	def update
-		financials = Financials.new
-		financials.update_all_tickers if params[:element] == 'tickers'
-		financials.update_all_ratio_data if params[:element] == 'data'
-		financials.update_all_quotes if params[:element] == 'quotes'
+		@company = Company.find(params[:id])
+
+		if @company.update(company_params)
+			redirect_to company_path(@company)
+		end
 	end
 
 private
 	def company_params
-		params.require(:company).permit(:ticker)
+		params.require(:company).permit(:ticker, :favorite, :comment)
 	end
 end

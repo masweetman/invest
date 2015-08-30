@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150829025947) do
+ActiveRecord::Schema.define(version: 20150830143216) do
 
   create_table "companies", force: :cascade do |t|
     t.string   "ticker",           limit: 255
@@ -20,11 +20,13 @@ ActiveRecord::Schema.define(version: 20150829025947) do
     t.float    "price_change_pct", limit: 24
     t.float    "calculated_pe",    limit: 24
     t.float    "div_yield",        limit: 24
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.string   "name",             limit: 255
     t.float    "bv_per_share",     limit: 24
     t.float    "p_to_bv",          limit: 24
+    t.text     "comment",          limit: 65535
+    t.boolean  "favorite"
   end
 
   create_table "dividends", force: :cascade do |t|
@@ -58,6 +60,7 @@ ActiveRecord::Schema.define(version: 20150829025947) do
     t.float    "max_p_to_bv",   limit: 24
     t.float    "min_div",       limit: 24
     t.float    "max_div",       limit: 24
+    t.boolean  "favorites"
   end
 
   create_table "settings", force: :cascade do |t|

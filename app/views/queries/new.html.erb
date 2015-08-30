@@ -28,6 +28,10 @@
 			<td><%= f.text_field :max_div %>%</td>
 		</tr>
 		<tr>
+			<td><%= f.label 'Only Show Favorites:' %></td>
+			<td><%= f.check_box :favorites %></td>
+		</tr>
+		<tr>
 			<td><%= f.label 'Sort By:' %></td>
 			<td><%= f.select :sort_criteria, options_for_select(Company.attribute_names) %></td>
 		</tr>
