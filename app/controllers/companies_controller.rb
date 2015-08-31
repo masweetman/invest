@@ -87,6 +87,11 @@ class CompaniesController < ApplicationController
 		end
 	end
 
+	def update_quotes
+		financials = Financials.new
+		financials.update_all_quotes
+	end
+
 private
 	def company_params
 		params.require(:company).permit(:ticker, :favorite, :comment)

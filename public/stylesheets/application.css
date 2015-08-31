@@ -1,5 +1,4 @@
 html { 
-    height:100%;
 }
 
 body {
@@ -12,6 +11,10 @@ body {
 	text-align:center;
 }
 
+.nowrap {
+    white-space: nowrap;
+}
+
 div.footer {
 	line-height: 30px;
     background-color: #fff;
@@ -19,9 +22,12 @@ div.footer {
 }
 
 div.header {
-	line-height: 60px;
     background-color: #fff;
-    height: 60px;
+    min-height: 120px;
+}
+
+div.header h1 {
+	line-height: 60px;
 }
 
 a img {
@@ -31,6 +37,12 @@ a img {
 table, th, td {
     border: 1px solid gray;
     border-collapse: collapse;
+}
+
+table.header, th.header, td.header {
+    border-style: none;
+    text-align: left;
+    width: 100%;
 }
 
 th, td {

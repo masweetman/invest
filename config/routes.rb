@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   end
   resources :queries
 
-  get 'update', to: 'companies#update'
+  get 'update_quotes', to: 'companies#update_quotes'
   
   root 'companies#index'
 

@@ -1,23 +1,4 @@
 <h2>Companies</h2>
-<p>
-<%= form_tag(companies_path, :method => :get) do %>
-	<label for='ticker'><%= 'Ticker' %>:</label>
-	<%= text_field_tag 'ticker', params[:ticker] %>
-	<%= submit_tag 'Search', :ticker => nil %>
-<% end %>
-<p>
-<%= form_tag(companies_path, :method => :get) do %>
-	<label for='name'><%= 'Company Name' %>:</label>
-	<%= text_field_tag 'name', params[:name] %>
-	<%= submit_tag 'Search', :ticker => nil %>
-<% end %>
-</p>
-<p>
-	<%= link_to 'Clear', companies_path %>
-</p>
-<p>
-	<%= link_to 'Queries', queries_path %>
-</p>
 
 <table align="center">
 	<thead>
@@ -49,7 +30,7 @@
 <%= will_paginate @companies %>
 </p>
 <p>
-	<%= link_to 'Update Quotes', {:controller => 'companies', :action => 'update', :element => 'quotes'}, :remote => true %>
+	<%= link_to 'Update Quotes', {:controller => 'companies', :action => 'update_quotes', :element => 'quotes'}, :remote => true %>
 </p>
 <% unless Setting.find_by_name("last_updated").nil? %>
 	<p>

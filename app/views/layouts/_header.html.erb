@@ -1,3 +1,26 @@
 <div class="header">
 	<h1><%= link_to 'Invest', root_url, :class => 'header' %></h1>
+	<table class="header">
+		<tr class="header">
+			<td class="header">
+			<span>
+				<%= form_tag(companies_path, :method => :get) do %>
+					<label for='ticker'><%= 'Ticker' %>:</label>
+					<%= text_field_tag 'ticker', params[:ticker], size: 5 %>
+			</span>
+			<span class= "nowrap">
+					<label for='name'><%= 'Company Name' %>:</label>
+					<%= text_field_tag 'name', params[:name], size: 10 %>
+			</span>
+			<span>
+					<%= submit_tag 'Search', :ticker => nil %>
+					<%= link_to 'Clear', companies_path %>
+				<% end %>
+			</span>
+			</td>
+			<td class="header nowrap">
+				<%= link_to 'Queries', queries_path %>
+			</td>
+		</tr>
+	</table>
 </div>

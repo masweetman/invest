@@ -49,5 +49,3 @@ test:
 production:
   <<: *default
   database: invest_production
-  username: root
-  password: password
