@@ -1,19 +1,19 @@
-@media (max-width: 480px) {
+@media all and (max-device-width: 667px) {
         table {
             width: 100%;
-            font-size: 18px;
+            font-size: 38px;
         }
 
         div, span, p, form, input {
-            font-size: 18px;
+            font-size: 38px;
         }
 
         h1, h2 {
-            font-size: 16px;
+            font-size: 38px;
         }
 
         .footer {
-            font-size: 14px;
+            font-size: 24px;
         }
 
         .hiddencolumn {
