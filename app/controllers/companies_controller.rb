@@ -5,8 +5,7 @@ class CompaniesController < ApplicationController
 	def index
 		scope = Company.all
 		scope = scope.order(params[:sort] + ' ' + params[:direction]) if params[:sort].present? && params[:direction].present?
-		scope = scope.where("lower(ticker) LIKE '#{params[:ticker].downcase}%'").order("ticker") if params[:ticker].present?
-		scope = scope.where("lower(name) LIKE '#{params[:name].downcase}%'").order("ticker") if params[:name].present?
+		scope = scope.where("lower(ticker) LIKE '#{params[:search].downcase}%' OR lower(name) LIKE '#{params[:search].downcase}%'").order("ticker") if params[:search].present?
 		scope = build_query(scope, params[:query_id]) if params[:query_id].present?
 		@companies = scope.paginate(:page => params[:page], :per_page => 30)
 	end

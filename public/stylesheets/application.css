@@ -1,57 +1,42 @@
-@media all and (max-device-width: 667px) {
-        table {
-            width: 100%;
-            font-size: 38px;
-        }
+/* @media all and (max-device-width: 667px) { */
+@media (max-width: 480px) {
+    table {
+        width: 100%;
+        font-size: 38px;
+    }
 
-        div, span, p, form, input {
-            font-size: 38px;
-        }
+    #header, body, form, input, select, textarea, button, option {
+        font-size: 38px;
+    }
 
-        h1, h2 {
-            font-size: 38px;
-        }
+    h1, h2 {
+        font-size: 38px;
+    }
 
-        .footer {
-            font-size: 24px;
-        }
+    #footer {
+        font-size: 24px;
+    }
 
-        .hiddencolumn {
-            display: none;
-        }
-
+    .hiddencolumn {
+        display: none;
+    }
 }
 
 html { 
 }
 
 body {
-	background-color:#F8F8F8;
-	font-size:14px;
-	font-family:"Arial";
-	margin:0;
-	padding:0;
-	color:#2e2e2e;
-	text-align:center;
+	background-color: #F8F8F8;
+	font-size: 14px;
+	font-family: "Arial";
+	margin: 0;
+	padding: 0;
+	color: #2e2e2e;
+	text-align: center;
 }
 
 .nowrap {
     white-space: nowrap;
-}
-
-div.footer {
-	line-height: 30px;
-    background-color: #fff;
-    height: 30px;
-}
-
-div.header {
-    background-color: #fff;
-    min-height: 120px;
-}
-
-div.header h1 {
-	line-height: 60px;
 }
 
 a img {
@@ -61,13 +46,6 @@ a img {
 table, th, td {
     border: 1px solid gray;
     border-collapse: collapse;
-}
-
-table.header, th.header, td.header {
-    border-style: none;
-    text-align: left;
-    width: 100%;
-    background-color: #CAD2E2;
 }
 
 th, td {
@@ -93,13 +71,44 @@ table tr:nth-child(odd) {
 
 a {
 	color: #1D8ECE;
-}
-
-a.header {
-	color: black;
-	text-decoration: none;
+    text-decoration: none;
 }
 
 a:hover {
-	text-decoration: none;
+    color: #116898;
+    text-decoration: none;
+}
+
+#header {
+    background-color: #fff;
+    min-height: 50px;
+}
+
+#header h1 {
+    line-height: 50px;
+    color: black;
+}
+
+#header a {
+    color: #116898;
+    text-decoration: none;
+}
+
+#header a:hover {
+    color: #1D8ECE;
+    text-decoration: none;
+}
+
+#menu {
+    width: 100%;
+    padding: 5px;
+    background-color: #ECECEC;
+    min-height: 20px;
+    overflow: auto !important;
+}
+
+#footer  {
+    line-height: 30px;
+    background-color: #fff;
+    height: 30px;
 }
