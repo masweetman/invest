@@ -8,6 +8,11 @@
         font-size: 38px;
     }
 
+    input[type="checkbox"]{
+        width: 30px;
+        height: 30px;
+    }
+
     h1, h2 {
         font-size: 38px;
     }
