@@ -55,12 +55,16 @@ class Financials
 	end
 
 	def update_all_quotes
-		quotes = yahoo.quotes(Company.all.map{ |c| c.ticker })
-		quotes.map{ |q|
-			c = Company.find_by_ticker(q.symbol)
-			update_quote(c, q)
-			update_ratios(c)
+		c = TransientCache.new
+
+		c[:q] = yahoo.quotes(Company.all.map{ |company| company.ticker })
+		c[:q].map{ |quote|
+			c[:c] = Company.find_by_ticker(quote.symbol)
+			update_quote(c[:c], quote)
+			update_ratios(c[:c])
 		}
+
+		ObjectSpace.garbage_collect
 	end
 
 	def update_all_ratio_data
