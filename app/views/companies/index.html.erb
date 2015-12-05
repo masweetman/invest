@@ -17,7 +17,7 @@
 		<tr>
 			<td class="hiddencolumn"><%= company.id %></td>
 			<td><%= link_to company.ticker, company %></td>
-			<td class="hiddencolumn"><%= company.name %></td>
+			<td class="hiddencolumn" style="text-align: left;"><%= company.name %></td>
 			<td><%= number_with_precision(company.price, precision: 2) if company.price? %></td>
 			<td style='<%= text_color %>'><%= number_to_percentage(company.price_change_pct * 100, precision: 2) if company.price_change_pct? %></td>
 			<td><%= number_with_precision(company.calculated_pe, precision: 1) if company.calculated_pe? %></td>
