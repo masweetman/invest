@@ -2,7 +2,6 @@
 
 <table align="center">
 	<thead>
-		<th class="hiddencolumn"><%= sortable 'id', 'ID' %></th>
 		<th><%= sortable 'ticker' %></th>
 		<th class="hiddencolumn"><%= sortable 'name' %></th>
 		<th><%= sortable 'price' %></th>
@@ -15,7 +14,6 @@
 		<% text_color = 'color: green !important;' if company.price_change_pct? && company.price_change_pct >= 0 %>
 		<% text_color = 'color: red !important;' if company.price_change_pct? && company.price_change_pct < 0 %>
 		<tr>
-			<td class="hiddencolumn"><%= company.id %></td>
 			<td><%= link_to company.ticker, company %></td>
 			<td class="hiddencolumn" style="text-align: left;"><%= company.name %></td>
 			<td><%= number_with_precision(company.price, precision: 2) if company.price? %></td>
