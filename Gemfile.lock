@@ -162,6 +162,3 @@ DEPENDENCIES
   web-console (~> 2.0)
   will_paginate
   yahoo-finance
-
-BUNDLED WITH
-   1.10.6

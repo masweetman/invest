@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150830143216) do
+ActiveRecord::Schema.define(version: 20151205220711) do
 
   create_table "companies", force: :cascade do |t|
     t.string   "ticker",           limit: 255
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20150830143216) do
     t.float    "p_to_bv",          limit: 24
     t.text     "comment",          limit: 65535
     t.boolean  "favorite"
+    t.string   "market_cap",       limit: 255
   end
 
   create_table "dividends", force: :cascade do |t|
