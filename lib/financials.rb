@@ -23,7 +23,7 @@ class Financials
 	end
 
 	def get_quote(company)
-		quote = yahoo.quote(company.ticker)
+		quote = yahoo.quote(company.ticker, [:last_trade_price, :change, :market_capitalization])
 		update_quote(company, quote)
 		update_ratios(company)
 	end
@@ -83,7 +83,7 @@ class Financials
 	def update_all_quotes
 		c = TransientCache.new
 
-		c[:q] = yahoo.quotes(Company.all.map{ |company| company.ticker })
+		c[:q] = yahoo.quotes(Company.all.map{ |company| company.ticker }, [:last_trade_price, :change, :market_capitalization])
 		c[:q].map{ |quote|
 			c[:c] = Company.find_by_ticker(quote.symbol)
 			update_quote(c[:c], quote)
@@ -104,6 +104,7 @@ class Financials
 		unless company.nil?
 			company.price = quote.last_trade_price.to_f
 			company.price_change_pct = quote.change.to_f / quote.previous_close.to_f unless quote.previous_close.to_f == 0
+			company.market_cap = quote.market_capitalization
 			company.save
 		end
 	end

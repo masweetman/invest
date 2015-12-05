@@ -47,6 +47,12 @@
 		<td><strong>Price to Book Value</strong></td>
 		<td><%= number_with_precision(@company.p_to_bv, precision: 2) %></td>
 	</tr>
+	<tr style="background-color: #fff;">
+		<td><strong>Market Cap</strong></td>
+		<td><%= @company.market_cap %></td>
+		<td></td>
+		<td></td>
+	</tr>
 </table>
 
 <br>
