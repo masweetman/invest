@@ -9,6 +9,7 @@
 		<th><%= sortable 'calculated_pe', 'P/E' %></th>
 		<th><%= sortable 'p_to_bv', 'P/BV' %></th>
 		<th><%= sortable 'div_yield', 'Yield' %></th>
+		<th><%= sortable 'market_cap_val', 'Market Cap' %></th>
 	</thead>
 	<% @companies.each do |company| %>
 		<% text_color = 'color: green !important;' if company.price_change_pct? && company.price_change_pct >= 0 %>
@@ -21,6 +22,7 @@
 			<td><%= number_with_precision(company.calculated_pe, precision: 1) if company.calculated_pe? %></td>
 			<td><%= number_with_precision(company.p_to_bv, precision: 1) if company.bv_per_share? %></td>
 			<td><%= number_to_percentage(company.div_yield * 100, precision: 2) if company.div_yield? %></td>
+			<td><%= company.market_cap if company.market_cap? %></td>
 		</tr>
 	<% end %>
 </table>
