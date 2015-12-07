@@ -19,6 +19,10 @@ class CompaniesController < ApplicationController
 		query_params['max_p_to_bv'] = q.max_p_to_bv if q.max_p_to_bv
 		query_params['min_div'] = q.min_div if q.min_div
 		query_params['max_div'] = q.max_div if q.max_div
+		query_params['min_cap_val'] = q.min_cap_val if q.min_cap_val
+		query_params['min_cap_order'] = q.min_cap_order if q.min_cap_order == 'Billion'
+		query_params['max_cap_val'] = q.max_cap_val if q.max_cap_val
+		query_params['max_cap_order'] = q.max_cap_order if q.max_cap_order == 'Million'
 		query_params['favorites'] = q.favorites if q.favorites
 
 		query = ''
@@ -31,6 +35,10 @@ class CompaniesController < ApplicationController
 			query += 'p_to_bv <= ' + param[1].to_s if param[0] == 'max_p_to_bv'
 			query += '(div_yield*100) >= ' + param[1].to_s if param[0] == 'min_div'
 			query += '(div_yield*100) <= ' + param[1].to_s if param[0] == 'max_div'
+			query += 'market_cap_val >= ' + param[1].to_s if param[0] == 'min_cap_val'
+			query += 'market_cap_order LIKE "B"' if param[0] == 'min_cap_order'
+			query += 'market_cap_val <= ' + param[1].to_s if param[0] == 'max_cap_val'
+			query += 'market_cap_order LIKE "M"' if param[0] == 'max_cap_order'
 			query += 'favorite = 1' if param[0] == 'favorites' && q.favorites == true
 
 			i += 1

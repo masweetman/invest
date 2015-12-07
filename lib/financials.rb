@@ -105,6 +105,10 @@ class Financials
 			company.price = quote.last_trade_price.to_f
 			company.price_change_pct = quote.change.to_f / quote.previous_close.to_f unless quote.previous_close.to_f == 0
 			company.market_cap = quote.market_capitalization
+			if company.market_cap.last == 'M' || company.market_cap.last == 'B'
+				company.market_cap_val = company.market_cap.to_f
+				company.market_cap_order = company.market_cap.last
+			end
 			company.save
 		end
 	end

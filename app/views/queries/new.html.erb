@@ -28,6 +28,14 @@
 			<td class="nowrap"><%= f.text_field :max_div %>%</td>
 		</tr>
 		<tr>
+			<td><%= f.label 'Min Market Cap:' %></td>
+			<td class="nowrap"><%= f.text_field :min_cap_val %> <%= f.select :min_cap_order, options_for_select(['Million','Billion']) %></td>
+		</tr>
+		<tr>
+			<td><%= f.label 'Max Market Cap:' %></td>
+			<td class="nowrap"><%= f.text_field :max_cap_val %> <%= f.select :max_cap_order, options_for_select(['Million','Billion']) %></td>
+		</tr>
+		<tr>
 			<td><%= f.label 'Only Show Favorites:' %></td>
 			<td><%= f.check_box :favorites %></td>
 		</tr>
