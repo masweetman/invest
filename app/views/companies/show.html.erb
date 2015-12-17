@@ -43,7 +43,7 @@
 	</tr>
 	<tr style="background-color: #fff;">
 		<td><strong>Change</strong></td>
-		<td style='<%= text_color %>'><%= number_to_percentage(@company.price_change_pct * 100, precision: 2) if @company.price_change_pct?%></td>
+		<td style='<%= text_color %>'><%= number_to_percentage(@company.price_change_pct, precision: 2) if @company.price_change_pct?%></td>
 		<td><strong>Price to Book Value</strong></td>
 		<td><%= number_with_precision(@company.p_to_bv, precision: 2) %></td>
 	</tr>
