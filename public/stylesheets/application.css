@@ -1,118 +1,118 @@
 @media all and (max-device-width: 667px) {
-    table {
-        width: 100%;
-        font-size: 38px;
-    }
+  table {
+    width: 100%;
+    font-size: 38px;
+  }
 
-    #header, body, form, input, select, textarea, button, option {
-        font-size: 38px;
-    }
+  #header, body, form, input, select, textarea, button, option {
+    font-size: 38px;
+  }
 
-    input[type="checkbox"]{
-        width: 40px;
-        height: 40px;
-    }
+  input[type="checkbox"]{
+    width: 40px;
+    height: 40px;
+  }
 
-    h1, h2 {
-        font-size: 38px;
-    }
+  h1, h2 {
+    font-size: 38px;
+  }
 
-    #footer {
-        font-size: 24px;
-    }
+  #footer {
+    font-size: 24px;
+  }
 
-    .hiddencolumn {
-        display: none;
-    }
+  .hiddencolumn {
+    display: none;
+  }
 }
 
 html { 
 }
 
 body {
-	background-color: #F8F8F8;
-	font-size: 14px;
-	font-family: "Arial";
-	margin: 0;
-	padding: 0;
-	color: #2e2e2e;
-	text-align: center;
+  background-color: #F8F8F8;
+  font-size: 14px;
+  font-family: "Arial";
+  margin: 0;
+  padding: 0;
+  color: #2e2e2e;
+  text-align: center;
 }
 
 .nowrap {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 a img {
-	border:none;
+  border:none;
 }
 
 table, th, td {
-    border: 1px solid gray;
-    border-collapse: collapse;
+  border: 1px solid gray;
+  border-collapse: collapse;
 }
 
 th, td {
-    padding: 5px;
+  padding: 5px;
 }
 
 table th {
-    color: white;
-    background-color: gray;
+  color: white;
+  background-color: gray;
 }
 
 table th a {
-    color: white !important;
+  color: white !important;
 }
 
 table tr:nth-child(even) {
-    background-color: #eee;
+  background-color: #eee;
 }
 
 table tr:nth-child(odd) {
-    background-color: #fff;
+  background-color: #fff;
 }
 
 a {
-	color: #1D8ECE;
-    text-decoration: none;
+  color: #1D8ECE;
+  text-decoration: none;
 }
 
 a:hover {
-    color: #116898;
-    text-decoration: none;
+  color: #116898;
+  text-decoration: none;
 }
 
 #header {
-    background-color: #fff;
-    min-height: 50px;
+  background-color: #fff;
+  min-height: 50px;
 }
 
 #header h1 {
-    line-height: 50px;
-    color: black;
+  line-height: 50px;
+  color: black;
 }
 
 #header a {
-    color: #116898;
-    text-decoration: none;
+  color: #116898;
+  text-decoration: none;
 }
 
 #header a:hover {
-    color: #1D8ECE;
-    text-decoration: none;
+  color: #1D8ECE;
+  text-decoration: none;
 }
 
 #menu {
-    width: 100%;
-    padding: 5px;
-    background-color: #ECECEC;
-    min-height: 20px;
-    overflow: auto !important;
+  width: 100%;
+  padding: 5px;
+  background-color: #ECECEC;
+  min-height: 20px;
+  overflow: auto !important;
 }
 
 #footer  {
-    line-height: 30px;
-    background-color: #fff;
-    height: 30px;
+  line-height: 30px;
+  background-color: #fff;
+  height: 30px;
 }

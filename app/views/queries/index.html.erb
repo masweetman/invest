@@ -1,16 +1,16 @@
 <h2>Queries</h2>
 
 <p>
-	<%= link_to 'New Query', new_query_path %>
+  <%= link_to 'New Query', new_query_path %>
 </p>
 
 <p>
-	<% @queries.each do |q| %>
-		<%= link_to q.name, {:controller => 'companies', :action => 'index', :query_id => q.id} %> | 
-		<%= link_to 'Edit', edit_query_path(q) %>
-		<br>
-	<% end %>
+  <% @queries.each do |q| %>
+    <%= link_to q.name, {:controller => 'companies', :action => 'index', :query_id => q.id} %> | 
+    <%= link_to 'Edit', edit_query_path(q) %>
+    <br>
+  <% end %>
 <p>
 <p>
-	<%= link_to 'Back', root_url %>
+  <%= link_to 'Back', root_url %>
 </p>

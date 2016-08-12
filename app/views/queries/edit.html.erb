@@ -2,54 +2,54 @@
 
 <%= form_for :query, url: query_path(@query), method: :patch do |f| %>
 
-	<table align="center">
-		<thead>
-			<th><%= f.label 'Query Name:' %></th>
-			<th><%= f.text_field :name %></th>
-		</thead>
-			<td><%= f.label 'Min PE:' %></td>
-			<td><%= f.text_field :min_pe %></td>
-		<tr>
-			<td><%= f.label 'Max PE:' %></td>
-			<td><%= f.text_field :max_pe %></td>
-		</tr>
-			<td><%= f.label 'Min Price/Book Value:' %></td>
-			<td><%= f.text_field :min_p_to_bv %></td>
-		<tr>
-			<td><%= f.label 'Max Price/Book Value:' %></td>
-			<td><%= f.text_field :max_p_to_bv %></td>
-		</tr>
-		<tr>
-			<td><%= f.label 'Min Dividend Yield:' %></td>
-			<td class="nowrap"><%= f.text_field :min_div %>%</td>
-		</tr>
-		<tr>
-			<td><%= f.label 'Max Dividend Yield:' %></td>
-			<td class="nowrap"><%= f.text_field :max_div %>%</td>
-		</tr>
-		<tr>
-			<td><%= f.label 'Min Market Cap:' %></td>
-			<td class="nowrap"><%= f.text_field :min_cap_val %> Million</td>
-		</tr>
-		<tr>
-			<td><%= f.label 'Max Market Cap:' %></td>
-			<td class="nowrap"><%= f.text_field :max_cap_val %> Million</td>
-		</tr>
-		<tr>
-			<td><%= f.label 'Only Show Favorites:' %></td>
-			<td><%= f.check_box :favorites %></td>
-		</tr>
-		<tr>
-			<td><%= f.label 'Sort By:' %></td>
-			<td><%= f.select :sort_criteria, options_for_select(Company.attribute_names, @query.sort_criteria) %></td>
-		</tr>
-	</table>
-	<p>
-		<%= f.submit %>
-	</p>
-	
+  <table align="center">
+    <thead>
+      <th><%= f.label 'Query Name:' %></th>
+      <th><%= f.text_field :name %></th>
+    </thead>
+      <td><%= f.label 'Min PE:' %></td>
+      <td><%= f.text_field :min_pe %></td>
+    <tr>
+      <td><%= f.label 'Max PE:' %></td>
+      <td><%= f.text_field :max_pe %></td>
+    </tr>
+      <td><%= f.label 'Min Price/Book Value:' %></td>
+      <td><%= f.text_field :min_p_to_bv %></td>
+    <tr>
+      <td><%= f.label 'Max Price/Book Value:' %></td>
+      <td><%= f.text_field :max_p_to_bv %></td>
+    </tr>
+    <tr>
+      <td><%= f.label 'Min Dividend Yield:' %></td>
+      <td class="nowrap"><%= f.text_field :min_div %>%</td>
+    </tr>
+    <tr>
+      <td><%= f.label 'Max Dividend Yield:' %></td>
+      <td class="nowrap"><%= f.text_field :max_div %>%</td>
+    </tr>
+    <tr>
+      <td><%= f.label 'Min Market Cap:' %></td>
+      <td class="nowrap"><%= f.text_field :min_cap_val %> Million</td>
+    </tr>
+    <tr>
+      <td><%= f.label 'Max Market Cap:' %></td>
+      <td class="nowrap"><%= f.text_field :max_cap_val %> Million</td>
+    </tr>
+    <tr>
+      <td><%= f.label 'Only Show Favorites:' %></td>
+      <td><%= f.check_box :favorites %></td>
+    </tr>
+    <tr>
+      <td><%= f.label 'Sort By:' %></td>
+      <td><%= f.select :sort_criteria, options_for_select(Company.attribute_names, @query.sort_criteria) %></td>
+    </tr>
+  </table>
+  <p>
+    <%= f.submit %>
+  </p>
+  
 <% end %>
 
 <p>
-	<%= link_to 'Back', queries_path %>
+  <%= link_to 'Back', queries_path %>
 </p>
