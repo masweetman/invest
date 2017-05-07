@@ -1,17 +1,10 @@
-<div id="header">
+<div id="menu">
   <h1><%= link_to 'Invest', root_url %></h1>
-  <div id="menu">
-    <div id="m1">
-      <%= form_tag(companies_path, :method => :get) do %>
-        <label for='search'><%= 'Search' %>:</label>
-        <%= text_field_tag 'search', params[:search], size: 10 %>
-        <%= submit_tag 'Go', :ticker => nil %>
-        <%= link_to 'Clear', companies_path %>
-      <% end %>
-    </div>
-    <br>
-    <div id="m2">
-      <%= link_to 'Queries', queries_path %>
-    </span>
+  <div id="search">
+    <%= form_tag(companies_path, :method => :get) do %>
+      <label for='search'><%= 'Search' %>:</label>
+      <%= text_field_tag 'search', params[:search], size: 10 %>
+      <%= submit_tag 'Go', :ticker => nil %>
+    <% end %>
   </div>
 </div>

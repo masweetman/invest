@@ -1,31 +1,51 @@
-<h2>Companies</h2>
-
-<table align="center">
-  <thead>
-    <th><%= sortable 'ticker' %></th>
-    <th class="hiddencolumn"><%= sortable 'name' %></th>
-    <th><%= sortable 'price' %></th>
-    <th><%= sortable 'price_change_pct', 'Change' %></th>
-    <th><%= sortable 'calculated_pe', 'P/E' %></th>
-    <th><%= sortable 'p_to_bv', 'P/BV' %></th>
-    <th><%= sortable 'div_yield', 'Yield' %></th>
-    <th><%= sortable 'market_cap_val', 'Market Cap' %></th>
-  </thead>
-  <% @companies.each do |company| %>
-    <% text_color = 'color: green !important;' if company.price_change_pct? && company.price_change_pct >= 0 %>
-    <% text_color = 'color: red !important;' if company.price_change_pct? && company.price_change_pct < 0 %>
-    <tr>
-      <td><%= link_to company.ticker, company %></td>
-      <td class="hiddencolumn" style="text-align: left;"><%= company.name %></td>
-      <td><%= number_with_precision(company.price, precision: 2) if company.price? %></td>
-      <td style='<%= text_color %>'><%= number_to_percentage(company.price_change_pct, precision: 2) if company.price_change_pct? %></td>
-      <td><%= number_with_precision(company.calculated_pe, precision: 1) if company.calculated_pe? %></td>
-      <td><%= number_with_precision(company.p_to_bv, precision: 1) if company.bv_per_share? %></td>
-      <td><%= number_to_percentage(company.div_yield * 100, precision: 2) if company.div_yield? %></td>
-      <td><%= company.market_cap if company.market_cap? %></td>
-    </tr>
+<div id="sidebar">
+  <h3>Queries</h3>
+  <ul>
+  <% @queries.each do |q| %>
+    <li><%= link_to q.name, {:controller => 'companies', :action => 'index', :query_id => q.id} %></li>
   <% end %>
-</table>
-<p>
-<%= will_paginate @companies %>
-</p>
+  </ul>
+  <p>
+    <%= link_to 'New Query', new_query_path %>
+  </p>
+</div>
+
+<div id="content">
+  
+  <% if @query %>
+    <div id="actionmenu">
+      <%= link_to 'Edit', edit_query_path(@query) %>
+    </div>
+    <h2><%= @query.name %></h2>
+  <% end %>
+
+  <table align="center">
+    <thead>
+      <th><%= sortable 'ticker' %></th>
+      <th class="hiddencolumn"><%= sortable 'name' %></th>
+      <th><%= sortable 'price' %></th>
+      <th><%= sortable 'price_change_pct', 'Change' %></th>
+      <th><%= sortable 'calculated_pe', 'P/E' %></th>
+      <th><%= sortable 'p_to_bv', 'P/BV' %></th>
+      <th><%= sortable 'div_yield', 'Yield' %></th>
+      <th><%= sortable 'market_cap_val', 'Market Cap' %></th>
+    </thead>
+    <% @companies.each do |company| %>
+      <% text_color = 'color: green !important;' if company.price_change_pct? && company.price_change_pct >= 0 %>
+      <% text_color = 'color: red !important;' if company.price_change_pct? && company.price_change_pct < 0 %>
+      <tr>
+        <td><%= link_to company.ticker, company %></td>
+        <td class="hiddencolumn" style="text-align: left;"><%= company.name %></td>
+        <td><%= number_with_precision(company.price, precision: 2) if company.price? %></td>
+        <td style='<%= text_color %>'><%= number_to_percentage(company.price_change_pct, precision: 2) if company.price_change_pct? %></td>
+        <td><%= number_with_precision(company.calculated_pe, precision: 1) if company.calculated_pe? %></td>
+        <td><%= number_with_precision(company.p_to_bv, precision: 1) if company.bv_per_share? %></td>
+        <td><%= number_to_percentage(company.div_yield * 100, precision: 2) if company.div_yield? %></td>
+        <td><%= company.market_cap if company.market_cap? %></td>
+      </tr>
+    <% end %>
+  </table>
+  <p>
+  <%= will_paginate @companies %>
+  </p>
+</div>

@@ -11,7 +11,7 @@ class QueriesController < ApplicationController
     @query = Query.new(query_params)
 
     if @query.save
-      redirect_to queries_path
+      redirect_to companies_path(query_id: @query.id)
     else
       render 'new'
     end
@@ -31,7 +31,7 @@ class QueriesController < ApplicationController
     @query = Query.find(params[:id])
 
     if @query.update(query_params)
-      redirect_to queries_path
+      redirect_to companies_path(query_id: @query.id)
     else
       render 'edit'
     end

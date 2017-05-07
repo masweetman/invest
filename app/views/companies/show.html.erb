@@ -1,97 +1,105 @@
-<h2><%= @company.name %></h2>
+<div id="sidebar">
+  <h3>Details</h3>
+  <ul>
+    <li><%= link_to 'Yahoo Quote', 'http://finance.yahoo.com/q?s=' + @company.ticker, :target => '_blank' %></li>
+    <li><%= link_to 'Google Quote', 'https://www.google.com/finance?q=' + @company.exchange + ':' + @company.ticker.gsub('-','.'), :target => '_blank' %></li>
+    <li><%= link_to 'Morningstar Financials', 'http://financials.morningstar.com/ratios/r.html?t=' + @company.ticker.gsub('-','.'), :target => '_blank' %></li>
+    <li><%= link_to 'SEC Form 10-k', 'http://www.sec.gov/cgi-bin/browse-edgar?type=10-k&Find=Search&owner=exclude&action=getcompany&CIK=' + @company.ticker.gsub('-',''), :target => '_blank' %></li>
+  </ul>
+</div>
 
-<% years = [] %>
-<% years[0] = Date.current.year %>
-<% years[1] = (Date.current - 1.year).year %>
-<% years[2] = (Date.current - 2.year).year %>
-<% years[3] = (Date.current - 3.year).year %>
-<% years[4] = (Date.current - 4.year).year %>
-<% years[5] = (Date.current - 5.year).year %>
-<% years[6] = (Date.current - 6.year).year %>
-<% years[7] = (Date.current - 7.year).year %>
+<div id="content">
+  <div id="actionmenu">
+    <%= link_to 'Back', root_url %>
+  </div>
 
-<% text_color = 'color: green !important;' if @company.price_change_pct? && @company.price_change_pct >= 0 %>
-<% text_color = 'color: red !important;' if @company.price_change_pct? && @company.price_change_pct < 0 %>
+  <h2><%= @company.name %></h2>
 
-<p><%= link_to 'Yahoo Quote', 'http://finance.yahoo.com/q?s=' + @company.ticker, :target => '_blank' %></p>
-<p><%= link_to 'Google Quote', 'https://www.google.com/finance?q=' + @company.exchange + ':' + @company.ticker.gsub('-','.'), :target => '_blank' %></p>
-<p><%= link_to 'Morningstar Financials', 'http://financials.morningstar.com/ratios/r.html?t=' + @company.ticker.gsub('-','.'), :target => '_blank' %></p>
-<p><%= link_to 'SEC Form 10-k', 'http://www.sec.gov/cgi-bin/browse-edgar?type=10-k&Find=Search&owner=exclude&action=getcompany&CIK=' + @company.ticker.gsub('-',''), :target => '_blank' %></p>
+  <% years = [] %>
+  <% years[0] = Date.current.year %>
+  <% years[1] = (Date.current - 1.year).year %>
+  <% years[2] = (Date.current - 2.year).year %>
+  <% years[3] = (Date.current - 3.year).year %>
+  <% years[4] = (Date.current - 4.year).year %>
+  <% years[5] = (Date.current - 5.year).year %>
+  <% years[6] = (Date.current - 6.year).year %>
+  <% years[7] = (Date.current - 7.year).year %>
 
-<table align="center" style='text-align: left;'>
-  <tr style="background-color: #fff;">
-    <td><strong>Ticker</strong></td>
-    <td><strong><%= @company.ticker %></strong></td>
-    <td><strong>P/E</strong></td>
-    <td><%= number_with_precision(@company.calculated_pe, precision: 1) %></td>
+  <% text_color = 'color: green !important;' if @company.price_change_pct? && @company.price_change_pct >= 0 %>
+  <% text_color = 'color: red !important;' if @company.price_change_pct? && @company.price_change_pct < 0 %>
 
-  </tr>
-  <tr style="background-color: #fff;">
-    <td><strong>Exchange</strong></td>
-    <td><%= @company.exchange %></td>
-    <td><strong>Div Yield</strong></td>
-    <td><%= number_to_percentage(@company.div_yield * 100, precision: 2) if @company.div_yield?%></td>
+  <table align="center" style='text-align: left;'>
+    <tr style="background-color: #fff;">
+      <td><strong>Ticker</strong></td>
+      <td><strong><%= @company.ticker %></strong></td>
+      <td><strong>P/E</strong></td>
+      <td><%= number_with_precision(@company.calculated_pe, precision: 1) %></td>
 
-  </tr>
-  <tr style="background-color: #fff;">
-    <td><strong>Price</strong></td>
-    <td><%= number_with_precision(@company.price, precision: 2) %></td>
-    <td><strong>Book Value Per Share</strong></td>
-    <td><%= number_with_precision(@company.bv_per_share, precision: 2) %></td>
+    </tr>
+    <tr style="background-color: #fff;">
+      <td><strong>Exchange</strong></td>
+      <td><%= @company.exchange %></td>
+      <td><strong>Div Yield</strong></td>
+      <td><%= number_to_percentage(@company.div_yield * 100, precision: 2) if @company.div_yield?%></td>
+
+    </tr>
+    <tr style="background-color: #fff;">
+      <td><strong>Price</strong></td>
+      <td><%= number_with_precision(@company.price, precision: 2) %></td>
+      <td><strong>Book Value Per Share</strong></td>
+      <td><%= number_with_precision(@company.bv_per_share, precision: 2) %></td>
 
 
-  </tr>
-  <tr style="background-color: #fff;">
-    <td><strong>Change</strong></td>
-    <td style='<%= text_color %>'><%= number_to_percentage(@company.price_change_pct, precision: 2) if @company.price_change_pct?%></td>
-    <td><strong>Price to Book Value</strong></td>
-    <td><%= number_with_precision(@company.p_to_bv, precision: 2) %></td>
-  </tr>
-  <tr style="background-color: #fff;">
-    <td><strong>Market Cap</strong></td>
-    <td><%= @company.market_cap %></td>
-    <td></td>
-    <td></td>
-  </tr>
-</table>
+    </tr>
+    <tr style="background-color: #fff;">
+      <td><strong>Change</strong></td>
+      <td style='<%= text_color %>'><%= number_to_percentage(@company.price_change_pct, precision: 2) if @company.price_change_pct?%></td>
+      <td><strong>Price to Book Value</strong></td>
+      <td><%= number_with_precision(@company.p_to_bv, precision: 2) %></td>
+    </tr>
+    <tr style="background-color: #fff;">
+      <td><strong>Market Cap</strong></td>
+      <td><%= @company.market_cap %></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
 
-<br>
+  <br>
 
-<table align="center">
-  <thead>
-    <th>Financials</th>
-    <% years.each do |year| %>
-      <th><%= year.to_s %></th>
-    <% end %>
-  </thead>
-  <tr>
-    <td><strong>Earnings Per Share</strong></td>
-    <% years.each do |year| %>
-      <td><%= @company.earnings.where(year: year).last.value unless @company.earnings.where(year: year).empty? %></td>
-    <% end %>
-  </tr>
-  <tr>
-    <td><strong>Dividends</strong></td>
-    <% years.each do |year| %>
-      <td><%= @company.dividends.where(year: year).last.value unless @company.dividends.where(year: year).empty? %></td>
-    <% end %>
-  </tr>
-</table>
+  <table align="center">
+    <thead>
+      <th>Financials</th>
+      <% years.each do |year| %>
+        <th><%= year.to_s %></th>
+      <% end %>
+    </thead>
+    <tr>
+      <td><strong>Earnings Per Share</strong></td>
+      <% years.each do |year| %>
+        <td><%= @company.earnings.where(year: year).last.value unless @company.earnings.where(year: year).empty? %></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td><strong>Dividends</strong></td>
+      <% years.each do |year| %>
+        <td><%= @company.dividends.where(year: year).last.value unless @company.dividends.where(year: year).empty? %></td>
+      <% end %>
+    </tr>
+  </table>
 
-<%= form_for :company, url: company_path(@company), method: :patch do |f| %>
-  <p>
-    <%= f.label 'Comments' %><br>
-    <%= f.text_area :comment, size: '50x10' %>
-  </p>
-  <p>
-    <%= f.label :favorite %>:
-    <%= f.check_box :favorite %>
-  </p>
-  <p>
-    <%= f.submit %>
-  </p>
-<% end %>
+  <%= form_for :company, url: company_path(@company), method: :patch do |f| %>
+    <p>
+      <%= f.label 'Comments' %><br>
+      <%= f.text_area :comment, size: '50x10' %>
+    </p>
+    <p>
+      <%= f.label :favorite %>:
+      <%= f.check_box :favorite %>
+    </p>
+    <p>
+      <%= f.submit %>
+    </p>
+  <% end %>
 
-<p>
-  <%= link_to 'Back', root_url %>
-</p>
+</div>

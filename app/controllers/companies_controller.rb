@@ -3,10 +3,18 @@ require 'financials'
 class CompaniesController < ApplicationController
 
   def index
+    @queries = Query.all
+
     scope = Company.all
     scope = scope.order(params[:sort] + ' ' + params[:direction]) if params[:sort].present? && params[:direction].present?
     scope = scope.where("lower(ticker) LIKE '#{params[:search].downcase}%' OR lower(name) LIKE '#{params[:search].downcase}%'").order("ticker") if params[:search].present?
-    scope = build_query(scope, params[:query_id]) if params[:query_id].present?
+    if scope.count == 1
+      redirect_to scope.first
+    end
+    if params[:query_id].present?
+      @query = Query.find(params[:query_id])
+      scope = build_query(scope, @query.id)
+    end
     @companies = scope.paginate(:page => params[:page], :per_page => 30)
   end
 
