@@ -121,7 +121,7 @@ ul {
   float: right;
 }
 
-@media (max-width: 755px) {
+@media only screen and (min-device-width : 375px) and (max-device-width : 667px) {
   #sidebar ul li {
     display: inline;
   }

@@ -23,7 +23,7 @@ class Financials
   end
 
   def get_quote(company)
-    quote = yahoo.quote(company.ticker, [:symbol, :last_trade_price, :change_in_percent, :market_capitalization])
+    quote = yahoo.quote(company.ticker, [:symbol, :last_trade_price, :change_in_percent, :market_capitalization, :stock_exchange])
     update_quote(company, quote)
     update_ratios(company)
   end
@@ -44,12 +44,6 @@ class Financials
     old_companies.each do |o|
       c = Company.find_by_ticker(o)
       unless c.nil?
-        c.earnings.each do |e|
-          e.destroy
-        end
-        c.dividends.each do |d|
-          d.destroy
-        end
         c.destroy
       end
     end
@@ -69,12 +63,6 @@ class Financials
     old_companies.each do |o|
       c = Company.find_by_ticker(o)
       unless c.nil?
-        c.earnings.each do |e|
-          e.destroy
-        end
-        c.dividends.each do |d|
-          d.destroy
-        end
         c.destroy
       end
     end
@@ -83,7 +71,7 @@ class Financials
   def update_all_quotes
     c = TransientCache.new
 
-    c[:q] = yahoo.quotes(Company.all.map{ |company| company.ticker }, [:symbol, :last_trade_price, :change_in_percent, :market_capitalization])
+    c[:q] = yahoo.quotes(Company.all.map{ |company| company.ticker }, [:symbol, :last_trade_price, :change_in_percent, :market_capitalization, :stock_exchange])
     c[:q].map{ |quote|
       c[:c] = Company.find_by_ticker(quote.symbol)
       update_quote(c[:c], quote)
@@ -94,7 +82,7 @@ class Financials
   end
 
   def update_all_ratio_data
-    Company.all.each do |company|
+    Company.all.where("require_update = true AND no_data = false").each do |company|
       get_data(company)
       sleep(rand(1..3))
     end
@@ -102,15 +90,24 @@ class Financials
 
   def update_quote(company, quote)
     unless company.nil?
-      company.price = quote.last_trade_price.to_f
-      company.price_change_pct = quote.change_in_percent.to_f
-      company.market_cap = quote.market_capitalization
-      if company.market_cap.last == 'M'
-        company.market_cap_val = company.market_cap.to_f
-      elsif company.market_cap.last == 'B'
-        company.market_cap_val = company.market_cap.to_f * 1000
+      if (quote.stock_exchange == 'NYQ' || quote.stock_exchange == 'NMS')
+        company.price = quote.last_trade_price.to_f
+        company.price_change_pct = quote.change_in_percent.to_f
+        company.market_cap = quote.market_capitalization
+        if company.market_cap.last == 'M'
+          company.market_cap_val = company.market_cap.to_f
+        elsif company.market_cap.last == 'B'
+          company.market_cap_val = company.market_cap.to_f * 1000
+        end
+
+        if company.earnings.empty? || (Date.today > company.earnings.last.updated_at + 90.days)
+          company.require_update = true
+        end
+
+        company.save
+      else
+        company.destroy
       end
-      company.save
     end
   end
 
@@ -134,12 +131,15 @@ class Financials
 
   def update_data(company, html)
     company.name = html.css('div.wrapper div.r_bodywrap div.r_header div.reports_nav div.r_title h1')[0].content if html.css('div.wrapper div.r_bodywrap div.r_header div.reports_nav div.r_title h1')[0]
-    unless company.name.nil?
+    if company.name.nil?
+      company.no_data = true
+    else
       company.bv_per_share = html.css('td[headers$="i8"]')[9].content.to_f if html.css('td[headers$="i8"]')[9]
       update_eps(company, html)
       update_div(company, html)
-      company.save
     end
+    company.require_update = false
+    company.save
   end
 
   def update_eps(company, html)
