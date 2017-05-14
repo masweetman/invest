@@ -12,7 +12,7 @@
   <div id="actionmenu">
     <%= link_to 'Back', root_url %>
   </div>
-
+  
   <h2><%= @company.name %></h2>
 
   <% years = [] %>
@@ -67,6 +67,10 @@
 
   <br>
 
+<% if @company.no_data %>
+No data.
+<% else %>
+
   <table align="center">
     <thead>
       <th>Financials</th>
@@ -87,6 +91,8 @@
       <% end %>
     </tr>
   </table>
+
+<% end %>
 
   <%= form_for :company, url: company_path(@company), method: :patch do |f| %>
     <p>

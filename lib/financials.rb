@@ -9,17 +9,13 @@ class Financials
   end
 
   def get_data(company)
-    c = TransientCache.new
-
-    c[:a] = 'casperjs '
-    c[:a] += Rails.root.join('app/assets/javascripts/get_data.js').to_s
-    c[:a] += ' ' + company.ticker.gsub('-','.')
-    c[:a] += ' ' + Rails.root.to_s
-    c[:h] = %x[ #{c[:a]} ]
-    c[:n] = Nokogiri::HTML(c[:h])
-    update_data(company, c[:n])
-
-    ObjectSpace.garbage_collect
+    a = 'casperjs '
+    a += Rails.root.join('app/assets/javascripts/get_data.js').to_s
+    a += ' ' + company.ticker.gsub('-','.')
+    a += ' ' + Rails.root.to_s
+    h = %x[ #{a} ]
+    n = Nokogiri::HTML(h)
+    update_data(company, n)
   end
 
   def get_quote(company)
@@ -73,20 +69,16 @@ class Financials
   end
 
   def update_all_quotes
-    c = TransientCache.new
-
-    c[:q] = yahoo.quotes(Company.all.map{ |company| company.ticker }, [:symbol, :last_trade_price, :change_in_percent, :market_capitalization, :stock_exchange])
-    c[:q].map{ |quote|
-      c[:c] = Company.find_by_ticker(quote.symbol)
+    q = yahoo.quotes(Company.all.map{ |company| company.ticker }, [:symbol, :last_trade_price, :change_in_percent, :market_capitalization, :stock_exchange])
+    q.map{ |quote|
+      c = Company.find_by_ticker(quote.symbol)
       if (quote.stock_exchange == 'NYQ' || quote.stock_exchange == 'NMS')
-        update_quote(c[:c], quote)
-        update_ratios(c[:c])
+        update_quote(c, quote)
+        update_ratios(c)
       else
-        c[:c].destroy
+        c.destroy
       end
     }
-
-    ObjectSpace.garbage_collect
   end
 
   def update_all_ratio_data
