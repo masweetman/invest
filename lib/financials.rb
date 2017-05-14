@@ -24,8 +24,12 @@ class Financials
 
   def get_quote(company)
     quote = yahoo.quote(company.ticker, [:symbol, :last_trade_price, :change_in_percent, :market_capitalization, :stock_exchange])
-    update_quote(company, quote)
-    update_ratios(company)
+    if (quote.stock_exchange == 'NYQ' || quote.stock_exchange == 'NMS')
+      update_quote(company, quote)
+      update_ratios(company)
+    else
+      company.destroy
+    end
   end
 
   def update_all_tickers
@@ -74,8 +78,12 @@ class Financials
     c[:q] = yahoo.quotes(Company.all.map{ |company| company.ticker }, [:symbol, :last_trade_price, :change_in_percent, :market_capitalization, :stock_exchange])
     c[:q].map{ |quote|
       c[:c] = Company.find_by_ticker(quote.symbol)
-      update_quote(c[:c], quote)
-      update_ratios(c[:c])
+      if (quote.stock_exchange == 'NYQ' || quote.stock_exchange == 'NMS')
+        update_quote(c[:c], quote)
+        update_ratios(c[:c])
+      else
+        c[:c].destroy
+      end
     }
 
     ObjectSpace.garbage_collect
@@ -90,24 +98,20 @@ class Financials
 
   def update_quote(company, quote)
     unless company.nil?
-      if (quote.stock_exchange == 'NYQ' || quote.stock_exchange == 'NMS')
-        company.price = quote.last_trade_price.to_f
-        company.price_change_pct = quote.change_in_percent.to_f
-        company.market_cap = quote.market_capitalization
-        if company.market_cap.last == 'M'
-          company.market_cap_val = company.market_cap.to_f
-        elsif company.market_cap.last == 'B'
-          company.market_cap_val = company.market_cap.to_f * 1000
-        end
-
-        if company.earnings.empty? || (Date.today > company.earnings.last.updated_at + 90.days)
-          company.require_update = true
-        end
-
-        company.save
-      else
-        company.destroy
+      company.price = quote.last_trade_price.to_f
+      company.price_change_pct = quote.change_in_percent.to_f
+      company.market_cap = quote.market_capitalization
+      if company.market_cap.last == 'M'
+        company.market_cap_val = company.market_cap.to_f
+      elsif company.market_cap.last == 'B'
+        company.market_cap_val = company.market_cap.to_f * 1000
       end
+
+      if company.earnings.empty? || (Date.today > company.earnings.last.updated_at + 90.days)
+        company.require_update = true
+      end
+
+      company.save
     end
   end
 
