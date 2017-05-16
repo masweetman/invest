@@ -99,7 +99,7 @@ class Financials
         company.market_cap_val = company.market_cap.to_f * 1000
       end
 
-      if company.earnings.empty? || (Date.today > company.earnings.last.updated_at + 90.days)
+      if company.earnings.empty? || (Date.today > company.earnings.last.updated_at + 30.days)
         company.require_update = true
       end
 
@@ -127,7 +127,7 @@ class Financials
 
   def update_data(company, html)
     company.name = html.css('div.wrapper div.r_bodywrap div.r_header div.reports_nav div.r_title h1')[0].content if html.css('div.wrapper div.r_bodywrap div.r_header div.reports_nav div.r_title h1')[0]
-    if company.name.nil?
+    if company.name.nil? || company.name.downcase.include?("pref share")
       company.no_data = true
     else
       company.bv_per_share = html.css('td[headers$="i8"]')[9].content.to_f if html.css('td[headers$="i8"]')[9]
@@ -144,6 +144,10 @@ class Financials
     end
     eps = html.css('td[headers$="i5"]').map do |i|
       i.content
+    end
+
+    if titles.length == 0
+      company.no_data = true
     end
 
     unless titles.length == 0 || eps.length == 0

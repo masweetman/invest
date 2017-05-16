@@ -7,7 +7,7 @@ class CompaniesController < ApplicationController
 
     scope = Company.all
     scope = scope.order(params[:sort] + ' ' + params[:direction]) if params[:sort].present? && params[:direction].present?
-    scope = scope.where("lower(ticker) LIKE '#{params[:search].downcase}%' OR lower(name) LIKE '#{params[:search].downcase}%'").order("ticker") if params[:search].present?
+    scope = scope.where("lower(ticker) LIKE '#{params[:search].downcase}%' OR lower(name) LIKE '%#{params[:search].downcase}%'").order("ticker") if params[:search].present?
     if scope.count == 1
       redirect_to scope.first
     end
@@ -92,6 +92,6 @@ class CompaniesController < ApplicationController
 
 private
   def company_params
-    params.require(:company).permit(:ticker, :favorite, :comment)
+    params.require(:company).permit(:ticker, :favorite, :comment, :no_data)
   end
 end
