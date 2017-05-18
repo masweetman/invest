@@ -112,8 +112,15 @@ No data.
     </p>
   <% end %>
 
+  <% unless @company.last_earnings_update.nil? %>
   <p>
-    Last earnings update: <%= @company.earnings.last.updated_at unless @company.earnings.last.nil? %>
+    Last earnings update: <%= @company.last_earnings_update %>
   </p>
+  <% end %>
+  <% unless @company.earnings.last.nil? %>
+  <p>
+    Last earnings value added on: <%= @company.earnings.last.created_at.to_date %> (<%= @company.earnings.last.year %>)
+  </p>
+  <% end %>
 
 </div>

@@ -82,7 +82,7 @@ class Financials
   end
 
   def update_all_ratio_data
-    Company.all.where("require_update = true AND no_data = false").each do |company|
+    Company.where(require_update: true).each do |company|
       get_data(company)
       sleep(rand(1..3))
     end
@@ -99,8 +99,11 @@ class Financials
         company.market_cap_val = company.market_cap.to_f * 1000
       end
 
-      if company.earnings.empty? || (Date.today > company.earnings.last.updated_at + Setting.update_frequency_days.value.to_i.days)
+      if (company.no_data == false && company.last_earnings_update.nil?) ||
+         (company.no_data == false && (Date.today > company.last_earnings_update + Setting.update_frequency_days.value.to_i.days))
         company.require_update = true
+      else
+        company.require_update = false
       end
 
       company.save
@@ -133,8 +136,8 @@ class Financials
       company.bv_per_share = html.css('td[headers$="i8"]')[9].content.to_f if html.css('td[headers$="i8"]')[9]
       update_eps(company, html)
       update_div(company, html)
+      company.last_earnings_update = Date.today
     end
-    company.require_update = false
     company.save
   end
 
