@@ -1,0 +1,16 @@
+<div id="content">
+  <div id="actionmenu">
+    <%= link_to 'Back', {:controller => 'companies', :action => 'index'} %>
+  </div>
+
+  <h2>Settings</h2>
+
+  <p>
+    <%= form_for :setting, url: setting_path(@update_frequency_days), method: :patch do |f| %>
+        <%= f.label 'Earnings update frequency (days):' %>
+        <%= f.text_field :value %>
+        <%= f.submit %>
+    <% end %>
+  </p>
+
+</div>

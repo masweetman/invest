@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :settings
   resources :companies do
     resources :earnings
   end

@@ -3,6 +3,8 @@ require 'financials'
 class CompaniesController < ApplicationController
 
   def index
+    Setting.init unless Setting.initialized?
+    
     @queries = Query.all
 
     scope = Company.all
