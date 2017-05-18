@@ -137,6 +137,7 @@ class Financials
       update_eps(company, html)
       update_div(company, html)
       company.last_earnings_update = Date.today
+      company.require_update = false
     end
     company.save
   end
