@@ -8,7 +8,7 @@
   <p>
     <%= form_for :setting, url: setting_path(@update_frequency_days), method: :patch do |f| %>
         <%= f.label 'Earnings update frequency (days):' %>
-        <%= f.text_field :value %>
+        <%= f.text_field :value, value: @update_frequency_days.value %>
         <%= f.submit %>
     <% end %>
   </p>

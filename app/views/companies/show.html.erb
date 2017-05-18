@@ -1,10 +1,10 @@
 <div id="sidebar">
   <h3>Details</h3>
   <ul>
-    <li><%= link_to 'Yahoo Quote', 'http://finance.yahoo.com/q?s=' + @company.ticker, :target => '_blank' %></li>
-    <li><%= link_to 'Google Quote', 'https://www.google.com/finance?q=' + @company.exchange + ':' + @company.ticker.gsub('-','.'), :target => '_blank' %></li>
+    <li><%= link_to 'Yahoo Quote', 'http://finance.yahoo.com/q?s=' + @company.ticker.to_s, :target => '_blank' %></li>
+    <li><%= link_to 'Google Quote', 'https://www.google.com/finance?q=' + @company.exchange.to_s + ':' + @company.ticker.gsub('-','.'), :target => '_blank' %></li>
     <li><%= link_to 'Morningstar Financials', 'http://financials.morningstar.com/ratios/r.html?t=' + @company.ticker.gsub('-','.'), :target => '_blank' %></li>
-    <li><%= link_to 'SEC Form 10-k', 'http://www.sec.gov/cgi-bin/browse-edgar?type=10-k&Find=Search&owner=exclude&action=getcompany&CIK=' + @company.ticker.gsub('-',''), :target => '_blank' %></li>
+    <li><%= link_to 'SEC Form 10-k', 'http://www.sec.gov/cgi-bin/browse-edgar?type=10-k&Find=Search&owner=exclude&action=getcompany&CIK=' + @company.ticker.to_s.gsub('-',''), :target => '_blank' %></li>
   </ul>
 </div>
 
@@ -111,5 +111,9 @@ No data.
       <%= f.submit %>
     </p>
   <% end %>
+
+  <p>
+    Last earnings update: <%= @company.earnings.last.updated_at unless @company.earnings.last.nil? %>
+  </p>
 
 </div>

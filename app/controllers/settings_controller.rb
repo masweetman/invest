@@ -1,7 +1,7 @@
 class SettingsController < ApplicationController
 
   def index
-    @update_frequency_days = Setting.find_by_name('update_frequency_days')
+    @update_frequency_days = Setting.update_frequency_days
   end
 
   def update

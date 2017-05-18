@@ -99,7 +99,7 @@ class Financials
         company.market_cap_val = company.market_cap.to_f * 1000
       end
 
-      if company.earnings.empty? || (Date.today > company.earnings.last.updated_at + 30.days)
+      if company.earnings.empty? || (Date.today > company.earnings.last.updated_at + Setting.update_frequency_days.value.to_i.days)
         company.require_update = true
       end
 
