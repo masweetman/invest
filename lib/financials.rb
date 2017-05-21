@@ -131,7 +131,7 @@ class Financials
   def update_data(company, html)
     company.name = html.css('div.wrapper div.r_bodywrap div.r_header div.reports_nav div.r_title h1')[0].content if html.css('div.wrapper div.r_bodywrap div.r_header div.reports_nav div.r_title h1')[0]
     if company.name.nil? || company.name.downcase.include?("pref share")
-      company.no_data = true
+      company.no_data = true unless company.earnings.any?
     else
       company.bv_per_share = html.css('td[headers$="i8"]')[9].content.to_f if html.css('td[headers$="i8"]')[9]
       update_eps(company, html)
@@ -151,7 +151,7 @@ class Financials
     end
 
     if titles.length == 0
-      company.no_data = true
+      company.no_data = true unless company.earnings.any?
     end
 
     unless titles.length == 0 || eps.length == 0
