@@ -8,7 +8,7 @@ namespace :invest do
     financials.update_all_quotes
   end
 
-  task :get_data => :environment do
+  task :get_all_data => :environment do
     financials = Financials.new
     financials.update_all_ratio_data
   end

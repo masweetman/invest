@@ -158,8 +158,7 @@ class Financials
       earnings_per_share = Hash.new
       titles.each_with_index do |title, earnings|
         if title.include?('-')
-          dateComponents = title.split /-/
-          earnings_per_share[dateComponents[0].to_i] = eps[earnings].to_f unless eps[earnings].to_f == 0
+          earnings_per_share[title] = eps[earnings].to_f unless eps[earnings].to_f == 0
         end
       end
       earnings_per_share.each do |eps|
@@ -168,7 +167,9 @@ class Financials
         else
           e = company.earnings.where(year: eps[0]).last
         end
-        e.year = eps[0]
+        date = eps[0].split /-/
+        e.year = date.first.to_i
+        e.month = date.last.to_i
         e.value = eps[1]
         e.save
       end
