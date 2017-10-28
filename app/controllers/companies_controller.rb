@@ -57,10 +57,9 @@ class CompaniesController < ApplicationController
 
   def show
     @company = Company.find(params[:id])
-    financials = Financials.new
 
-    financials.get_data(@company) if (@company.name.nil? || @company.updated_at.to_date <= (Date.today - 1.month))
-    financials.get_quote(@company)
+    @company.scrape if (@company.name.nil? || @company.updated_at.to_date <= (Date.today - 1.month))
+    @company.quote
   end
   
   def new
@@ -83,11 +82,6 @@ class CompaniesController < ApplicationController
     if @company.update(company_params)
       redirect_to company_path(@company)
     end
-  end
-
-  def update_quotes
-    financials = Financials.new
-    financials.update_all_quotes
   end
 
 private

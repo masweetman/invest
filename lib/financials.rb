@@ -58,7 +58,7 @@ class Financials
 
   def update_all_ratio_data
     Company.where(require_update: true).each do |company|
-      c.scrape
+      company.scrape
       sleep(rand(1..3))
     end
   end
