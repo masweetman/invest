@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'nokogiri'
-gem 'yahoo-finance'
+gem 'yahoo-finance', :git => "git://github.com/brettallred/yahoo-finance.git", :branch => "brett/v3"
 gem 'will_paginate'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

@@ -91,23 +91,22 @@ class Company < ActiveRecord::Base
   end
 
   def quote
-    quote = YahooFinance::Client.new.quote(ticker, [:symbol, :last_trade_price, :change_in_percent, :market_capitalization, :stock_exchange])
-    if (quote.stock_exchange == 'NYQ' || quote.stock_exchange == 'NMS')
+    quote = YahooFinance::Client.new.quote(ticker)
+    if !quote.nil? && (quote.exchange == 'NYQ' || quote.exchange == 'NMS')
       update_quote(quote)
     else
-      self.destroy
+      #self.destroy
     end
   end
 
   def update_quote(quote)
-    self.price = quote.last_trade_price.to_f
-    self.price_change_pct = quote.change_in_percent.to_f
-    self.market_cap = quote.market_capitalization
-    if self.market_cap.last == 'M'
-      self.market_cap_val = self.market_cap.to_f
-    elsif self.market_cap.last == 'B'
-      self.market_cap_val = self.market_cap.to_f * 1000
-    end
+    self.price = quote.regularMarketPrice.to_f
+    self.price_change_pct = quote.regularMarketChangePercent.to_f
+    self.market_cap_val = quote.marketCap.to_f
+    bil = (quote.marketCap.to_f/1000000000).round 2
+    mil = (quote.marketCap.to_f/1000000).round 2
+    self.market_cap = bil.to_s + "B" if bil >= 1
+    self.market_cap = mil.to_s + "B" if bil < 1
 
     if (self.no_data == false && self.last_earnings_update.nil?) ||
        (self.no_data == false && (Date.today > self.last_earnings_update + Setting.update_frequency_days.value.to_i.days))

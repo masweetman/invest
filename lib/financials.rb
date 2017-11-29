@@ -45,20 +45,15 @@ class Financials
   end
 
   def update_all_quotes
-    q = yahoo.quotes(Company.all.map{ |company| company.ticker }, [:symbol, :last_trade_price, :change_in_percent, :market_capitalization, :stock_exchange])
-    q.map{ |quote|
-      c = Company.find_by_ticker(quote.symbol)
-      if (quote.stock_exchange == 'NYQ' || quote.stock_exchange == 'NMS')
-        c.update_quote(quote)
-      else
-        c.destroy
-      end
-    }
+    Company.all.each do |c|
+        c.quote
+    end
   end
 
   def update_all_ratio_data
     Company.where(require_update: true).each do |company|
       company.scrape
+      puts "Getting data for id " + company.id.to_s + ": " + company.ticker
       sleep(rand(1..3))
     end
   end
