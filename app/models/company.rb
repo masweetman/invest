@@ -106,7 +106,7 @@ class Company < ActiveRecord::Base
     bil = (quote.marketCap.to_f/1000000000).round 2
     mil = (quote.marketCap.to_f/1000000).round 2
     self.market_cap = bil.to_s + "B" if bil >= 1
-    self.market_cap = mil.to_s + "B" if bil < 1
+    self.market_cap = mil.to_s + "M" if bil < 1
 
     if (self.no_data == false && self.last_earnings_update.nil?) ||
        (self.no_data == false && (Date.today > self.last_earnings_update + Setting.update_frequency_days.value.to_i.days))
